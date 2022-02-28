@@ -147,3 +147,10 @@ void Image::DisplayImage(){
           cout << endl;
      }
 }
+
+//function to return the height of the matrix of the file given as argument
+int getHeightOfMatrix(std::string &filemame){
+     int heightOfMatrix;
+     //add the code for this function later
+     return heightOfMatrix;
+}
