@@ -104,7 +104,10 @@ public:
   /// Returns true if (i1, j1) and (i2, j2) are two consecutive piels of this
   //bool areConsecutivePixels(int i1, int j1, int i2, int j2);
 
-  void DisplayImage();
+  //function to display a member of the Image class in the terminal
+  void DisplayImageInTerminal();
+
+
 private:
 
   //start of my modifications:
@@ -115,8 +118,6 @@ private:
   //representing the matrix of pixels by a vector of vectors of color
   vector<vector<Color> > pixelMatrix;
   
-
-
 
   /// Tests if (i,j) is the coordinates of some pixel of this
   //bool isValidCoordinate(int i, int j) const;

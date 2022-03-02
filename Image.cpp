@@ -97,24 +97,39 @@ Image Image::readAIP(const std::string &filename)
 {
      //ask what precondition do we need for this method.
 
-     // Create a text string, which is used to manipulate the text file
+
+     // Create a text string, which is used to manipulate the AIP file
      string myText;
-     // Create and open a text file using a library
+     // Create and open a AIP file via an object from the ifstream class
      ifstream MyReadFile("./images/" + filename);
-     // Use a while loop together with the getline() function to read the file line by line
+
+     //re
      getline(MyReadFile, myText);
-     //getting the width of the file by converting a char to inv playing with ascii values
-     int widthOfFile = std::stoi(to_string((int)myText[0] - 48) + to_string((int)myText[1] - 48));
-     int heightOfFile = std::stoi(to_string((int)myText[3] - 48) + to_string((int)myText[4] - 48));
-     cout << "width of file is: " << widthOfFile << endl;
-     Image tmpImage = Image(widthOfFile, heightOfFile);
+     //using strings to get the height and width mentionned in the AIP file, to then cast them to integers.
+     string heightOfMatrixSTD, widthOfMatrixSTD;
+     //getting the first and second chars of the first line in the file, which corresponds in our case to the width of the matrix
+     widthOfMatrixSTD[0] = myText[0];
+     widthOfMatrixSTD[1] = myText[1];
+     //same idea but for the height of the matrix
+     heightOfMatrixSTD[0] = myText[3];
+     heightOfMatrixSTD[1] = myText[4];
+     //getting the integer value of these strings
+     int heightOfMatrix = stoi(heightOfMatrixSTD);
+     int widthOfMatrix = stoi(widthOfMatrixSTD);
+     cout << "width of file is: " << widthOfMatrix << endl;
+
+     //initializing an object of the Image class to a full black matrix, that will then be changed pixel by pixel
+     Image tmpImage = Image(widthOfMatrix, heightOfMatrix);
+
+     //iterator that will be used to iterate through each row of the matrix
      int iIterator = 1;
+     //while loop that will iterate through each line of the AIP file
      while (getline(MyReadFile, myText))
      {
           //myText.size() here gives us the length (number of columns) of the current line we are looking at
+          //starting the loop at j=1 later as the setPixel function modifies the pixel at position i-1 and j-1
           for (int j = 1; j < (int)myText.size(); j++){
-               //int test = (int)myText[j-1] - 48;
-               //cout << "current color is: " << test << endl;
+               //setting the pixel of the iIterator-th row and j-th column to the color read at iIterator row and j-1-th column
                tmpImage.setPixel(iIterator, j, Color::makeColor((int)myText[j-1] - 48));
           }
           iIterator++;
@@ -130,6 +145,8 @@ Image Image::readAIP(const std::string &filename)
 Color Image::getPixel(int i, int j) const
 {
      //assert(1 <= i <= height() && 1 <= j <= width());
+     //getting the pixel at i-1 and j-1 as i and j have to be >= 1
+     //which means if i or/and j are 1, we want the first pixel which is at position 1-1=0
      return pixelMatrix.at(i-1).at(j-1);
 }
 
@@ -139,18 +156,11 @@ void Image::setPixel(int i, int j, Color col)
      pixelMatrix.at(i-1).at(j-1) = col;
 }
 
-void Image::DisplayImage(){
+void Image::DisplayImageInTerminal(){
      for (int i = 1; i <= (int)pixelMatrix.size(); i++){
           for (int j = 1; j <= (int)pixelMatrix.at(i-1).size(); j++){
                cout << pixelMatrix.at(i-1).at(j-1).toInt();
           }
           cout << endl;
      }
-}
-
-//function to return the height of the matrix of the file given as argument
-int getHeightOfMatrix(std::string &filemame){
-     int heightOfMatrix;
-     //add the code for this function later
-     return heightOfMatrix;
 }
