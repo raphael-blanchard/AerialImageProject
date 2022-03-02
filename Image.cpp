@@ -34,8 +34,10 @@ void Image::writeSVG(const std::string &filename, int pixelSize) const
           << "\">"
           << std::endl;
 
-     for (int i = 1; i < height(); ++i){
-          for (int j = 1; j < width(); ++j){
+     for (int i = 1; i < height(); ++i)
+     {
+          for (int j = 1; j < width(); ++j)
+          {
                file << "<rect width=\""
                     << pixelSize
                     << "\" height=\""
@@ -61,21 +63,26 @@ Image::Image(int w, int h)
 {
      heightVal = h;
      widthVal = w;
+
+     //pixelMatrix being a vector of vectors, we first have to push_back the Black color in a temporary vector
+     //and then push_back this vector to the pixelMatrix
+     vector<Color> tmpVector;
+     //
+     for (int j = 1; j <= w; j++)
+     {
+          tmpVector.push_back(Color::Black);
+     }
+
      //loop to instatiate every pixel of the matrix to be black
      //using the height here as pixelMatrix[i][j] would be the pixel of the ith row and in the jth column
      for (int i = 1; i <= h; i++)
      {
-          //pixelMatrix being a vector of vectors, we first have to push_back the Black color in a temporary vector
-          //and then push_back this vector to the pixelMatrix
-          vector<Color> tmpVector;
-          for (int j = 1; j <= w; j++)
-          {
-               tmpVector.push_back(Color::Black);
-          }
           //pushing back the vector we just updated in the loop with j
           //each tmpVector corresponds to a row of the image
           pixelMatrix.push_back(tmpVector);
      }
+
+     //O(w+h) ? O(n^2)
 }
 
 int Image::width() const
@@ -97,7 +104,6 @@ Image Image::readAIP(const std::string &filename)
 {
      //ask what precondition do we need for this method.
 
-
      // Create a text string, which is used to manipulate the AIP file
      string myText;
      // Create and open a AIP file via an object from the ifstream class
@@ -105,6 +111,7 @@ Image Image::readAIP(const std::string &filename)
 
      //re
      getline(MyReadFile, myText);
+     
      //using strings to get the height and width mentionned in the AIP file, to then cast them to integers.
      string heightOfMatrixSTD, widthOfMatrixSTD;
      //getting the first and second chars of the first line in the file, which corresponds in our case to the width of the matrix
@@ -113,6 +120,8 @@ Image Image::readAIP(const std::string &filename)
      //same idea but for the height of the matrix
      heightOfMatrixSTD[0] = myText[3];
      heightOfMatrixSTD[1] = myText[4];
+
+
      //getting the integer value of these strings
      int heightOfMatrix = stoi(heightOfMatrixSTD);
      int widthOfMatrix = stoi(widthOfMatrixSTD);
@@ -128,9 +137,10 @@ Image Image::readAIP(const std::string &filename)
      {
           //myText.size() here gives us the length (number of columns) of the current line we are looking at
           //starting the loop at j=1 later as the setPixel function modifies the pixel at position i-1 and j-1
-          for (int j = 1; j < (int)myText.size(); j++){
+          for (int j = 1; j < (int)myText.size(); j++)
+          {
                //setting the pixel of the iIterator-th row and j-th column to the color read at iIterator row and j-1-th column
-               tmpImage.setPixel(iIterator, j, Color::makeColor((int)myText[j-1] - 48));
+               tmpImage.setPixel(iIterator, j, Color::makeColor((int)myText[j - 1] - 48));
           }
           iIterator++;
      }
@@ -147,19 +157,22 @@ Color Image::getPixel(int i, int j) const
      //assert(1 <= i <= height() && 1 <= j <= width());
      //getting the pixel at i-1 and j-1 as i and j have to be >= 1
      //which means if i or/and j are 1, we want the first pixel which is at position 1-1=0
-     return pixelMatrix.at(i-1).at(j-1);
+     return pixelMatrix.at(i - 1).at(j - 1);
 }
 
 void Image::setPixel(int i, int j, Color col)
 {
      //add the assert later
-     pixelMatrix.at(i-1).at(j-1) = col;
+     pixelMatrix.at(i - 1).at(j - 1) = col;
 }
 
-void Image::DisplayImageInTerminal(){
-     for (int i = 1; i <= (int)pixelMatrix.size(); i++){
-          for (int j = 1; j <= (int)pixelMatrix.at(i-1).size(); j++){
-               cout << pixelMatrix.at(i-1).at(j-1).toInt();
+void Image::DisplayImageInTerminal()
+{
+     for (int i = 1; i <= (int)pixelMatrix.size(); i++)
+     {
+          for (int j = 1; j <= (int)pixelMatrix.at(i - 1).size(); j++)
+          {
+               cout << pixelMatrix.at(i - 1).at(j - 1).toInt();
           }
           cout << endl;
      }
