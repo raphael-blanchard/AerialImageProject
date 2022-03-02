@@ -128,8 +128,17 @@ private:
   //corresponding to the height and width of the image
   int heightVal;
   int widthVal;
-  //representing the matrix of pixels by a vector of vectors of color
-  vector<vector<Color> > pixelMatrix;
+  
+  //We initially went with the representation of the matrix in a vector of vectors of colors, but after some research on the differences
+  //we decided to go with the representation of the matrix of pixels by a single vector of colors because of multiple reasons:
+  // - vector of vectors would mean non contiguous memory on the part of the underlying vectors (the columns). Representing the matrix by a single vector
+  // would give use contiguous memory. Using a vector of vectors shouldn't change much the time of completion by the computer thanks to how c++ is made but it will
+  // require the cpu to work a little more because of less efficient memory caching. However, even if it doesn't change the performance by much, it doesn't mean
+  // we should make the cpu work more if we can find a workaround.
+
+
+  //representing the matrix of pixels by a vector of colors that will be of size w*h. The method of storage here is in row-major order.
+  vector<Color> pixelMatrix;
   
 
   /// Tests if (i,j) is the coordinates of some pixel of this
