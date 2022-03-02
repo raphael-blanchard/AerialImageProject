@@ -59,6 +59,9 @@ public:
   /// Maps a coordinate (i, j) to a unique identifier
   //int toIndex(int i, int j) const;
 
+  //(1, 1) --> 11?
+
+
   /// Maps an identifier to the corresponding coordinates
   /// Given the result p, p.first is the row and p.second is the column 
   //std::pair<int, int> toCoordinate(int k) const;
@@ -106,6 +109,11 @@ public:
 
   //function to display a member of the Image class in the terminal
   void DisplayImageInTerminal();
+
+  //function to get the height of the matrix mentionned in the first line of an AIP file
+  static int getHeightOfMatrix(const std::string &filename);
+  //function to get the width of the matrix mentionned in the first line of an AIP file
+  static int getWidthOfMatrix(const std::string &filename);
 
 
 private:

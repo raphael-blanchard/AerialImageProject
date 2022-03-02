@@ -111,20 +111,12 @@ Image Image::readAIP(const std::string &filename)
 
      //re
      getline(MyReadFile, myText);
-     
-     //using strings to get the height and width mentionned in the AIP file, to then cast them to integers.
-     string heightOfMatrixSTD, widthOfMatrixSTD;
-     //getting the first and second chars of the first line in the file, which corresponds in our case to the width of the matrix
-     widthOfMatrixSTD[0] = myText[0];
-     widthOfMatrixSTD[1] = myText[1];
-     //same idea but for the height of the matrix
-     heightOfMatrixSTD[0] = myText[3];
-     heightOfMatrixSTD[1] = myText[4];
+
+     //using integers to store the return values of 2 functions getHeightOfMatrix(...) and getWidthOfMatrix(...)
+     int heightOfMatrix = getHeightOfMatrix(filename);
+     int widthOfMatrix = getWidthOfMatrix(filename);
 
 
-     //getting the integer value of these strings
-     int heightOfMatrix = stoi(heightOfMatrixSTD);
-     int widthOfMatrix = stoi(widthOfMatrixSTD);
      cout << "width of file is: " << widthOfMatrix << endl;
 
      //initializing an object of the Image class to a full black matrix, that will then be changed pixel by pixel
@@ -151,7 +143,7 @@ Image Image::readAIP(const std::string &filename)
      return tmpImage;
 }
 
-///
+//
 Color Image::getPixel(int i, int j) const
 {
      //assert(1 <= i <= height() && 1 <= j <= width());
@@ -176,4 +168,52 @@ void Image::DisplayImageInTerminal()
           }
           cout << endl;
      }
+}
+
+int Image::getHeightOfMatrix(const std::string &filename)
+{
+     string heightOfMatrixSTD;
+     // Create a text string, which is used to manipulate the AIP file
+     string myText;
+     // Create and open a AIP file via an object from the ifstream class
+     ifstream MyReadFile("./images/" + filename);
+
+     getline(MyReadFile, myText);
+     int i;
+     for (i = 0; i < myText.length(); i++){
+          if (myText[i] == ' '){
+               break;
+          }
+     }
+     for (int j = myText.length() - i; j < myText.length(); j++){
+          heightOfMatrixSTD[j-i-1] = myText[j];
+     }
+     int heightOfMatrix = stoi(heightOfMatrixSTD);
+     // Close the file
+     MyReadFile.close();
+     return heightOfMatrix;
+}
+
+int Image::getWidthOfMatrix(const std::string &filename)
+{
+     string widthOfMatrixSTD;
+     // Create a text string, which is used to manipulate the AIP file
+     string myText;
+     // Create and open a AIP file via an object from the ifstream class
+     ifstream MyReadFile("./images/" + filename);
+
+     getline(MyReadFile, myText);
+     int i;
+     for (i = 0; i < myText.length(); i++){
+          if (myText[i] == ' '){
+               break;
+          }
+          else {
+               widthOfMatrixSTD[i] = myText[i];
+          }
+     }
+     int widthOfMatrix = stoi(widthOfMatrixSTD);
+     // Close the file
+     MyReadFile.close();
+     return widthOfMatrix;
 }
