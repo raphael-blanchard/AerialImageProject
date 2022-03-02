@@ -82,7 +82,7 @@ Image::Image(int w, int h)
           pixelMatrix.push_back(tmpVector);
      }
 
-     //O(w+h) ? O(n^2)
+     //O(w+h) ? 
 }
 
 int Image::width() const
@@ -146,7 +146,7 @@ Image Image::readAIP(const std::string &filename)
 //
 Color Image::getPixel(int i, int j) const
 {
-     //assert(1 <= i <= height() && 1 <= j <= width());
+     assert(1 <= i <= height() && 1 <= j <= width());
      //getting the pixel at i-1 and j-1 as i and j have to be >= 1
      //which means if i or/and j are 1, we want the first pixel which is at position 1-1=0
      return pixelMatrix.at(i - 1).at(j - 1);
@@ -216,4 +216,29 @@ int Image::getWidthOfMatrix(const std::string &filename)
      // Close the file
      MyReadFile.close();
      return widthOfMatrix;
+}
+
+int Image::toIndex(int i, int j) const{
+     return i*width() + j;
+}
+
+std::pair<int, int> Image::toCoordinate(int k) const{
+     //i = k / widthOfMatrix
+     //j = k % widthOfMatrix
+     std::pair<int, int> tmpPair;
+     tmpPair.first = k / width();
+     tmpPair.second = k % width();
+     return tmpPair;
+}
+
+void Image::fill(Color c){
+     vector<Color> tmpVect;
+     for (int i = 0; i < widthVal; i++){
+          tmpVect.push_back(c);
+     }
+
+     for (int i = 0; i < heightVal; i++){
+          
+     }
+
 }

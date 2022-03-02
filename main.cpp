@@ -41,5 +41,10 @@ int main(void)
   testingImage2.writeSVG("firstfiletest", 20);
   cout << "width of matrix is: " << testingImage2.getWidthOfMatrix("amazonie_0.aip") << endl;
   cout << "height of matrix is: " << testingImage2.getHeightOfMatrix("amazonie_0.aip") << endl;
+
+  int index = testingImage2.toIndex(2,5);
+  cout << "index is: " << index << endl;
+  std::pair<int, int> testingPair = testingImage2.toCoordinate(index);
+  cout << "the pair is: (" << testingPair.first << ", " << testingPair.second << ")" << endl;
   return 0;
 }

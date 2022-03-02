@@ -57,22 +57,27 @@ public:
   void setPixel(int i, int j, Color col);
 
   /// Maps a coordinate (i, j) to a unique identifier
-  //int toIndex(int i, int j) const;
-
-  //(1, 1) --> 11?
-
+  int toIndex(int i, int j) const;
+  // since we know that w > h and i < h and j < w
+  //toIndex will return i x w + j
+  //to find i in the toCoordinate function we will do the integer division of the int given
+  //in argument by the width of the matrix; To find j, we'll do the argument given modulo the
+  //width of the matrix
+  //i = (i*w+j)/w
+  //j = (i*w+j)%w
 
   /// Maps an identifier to the corresponding coordinates
   /// Given the result p, p.first is the row and p.second is the column 
-  //std::pair<int, int> toCoordinate(int k) const;
+  std::pair<int, int> toCoordinate(int k) const;
+
 
   /// Fills this with a given color
-  //void fill(Color c);
+  void fill(Color c);
 
   /// Fills a rectangle in this with a given color
   /// (i1, j1) is the upper left corner
   /// (i2, j2) is the lower right corner
-  //void fillRectangle(int i1, int j1, int i2, int j2, Color c);
+  void fillRectangle(int i1, int j1, int i2, int j2, Color c);
   
   /// Generates a SVG image given a filename without the extension
   /// The file name is of this image is filename.svg
