@@ -21,9 +21,6 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 class Image {
 public:
-  // //MY PROTOTYPE CHECK IF GOOD
-  // Image();
-
 
   /// Creates a black rectangular image with w*h pixels
   /// w is the width of this image, h is its height
@@ -96,7 +93,7 @@ public:
   ///   23101
   /// The output file is named filename.aip
   /// Throws an exception std::runtime_error if an error occurs
-  //void writeAIP(const std::string& filename) const;
+  void writeAIP(const std::string& filename) const;
 
   /// Creates an image from an AIP file
   /// The file name must be given without the extension
@@ -104,7 +101,7 @@ public:
   static Image readAIP(const std::string& filename);
 
   /// Returns true if this and img are equal
-  //bool operator==(const Image& img) const;
+  bool operator==(const Image& img) const;
 
   /// Returns true if this and img are different
   //bool operator!=(const Image& img) const;
@@ -120,6 +117,7 @@ public:
   //function to get the width of the matrix mentionned in the first line of an AIP file
   static int getWidthOfMatrix(const std::string &filename);
 
+  int getNumberOfPixels();
 
 private:
 
