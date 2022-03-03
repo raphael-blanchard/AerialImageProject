@@ -192,6 +192,7 @@ int Image::getWidthOfMatrix(const std::string &filename)
      ifstream MyReadFile("./images/" + filename);
 
      getline(MyReadFile, myText);
+     cout << "width of matrix is " << myText << endl;
      int i;
      for (i = 0; i < (int)myText.length(); i++)
      {
@@ -204,6 +205,7 @@ int Image::getWidthOfMatrix(const std::string &filename)
                widthOfMatrixSTD[i] = myText[i];
           }
      }
+     
      int widthOfMatrix = stoi(widthOfMatrixSTD);
      // Close the file
      MyReadFile.close();
@@ -236,36 +238,36 @@ int Image::getNumberOfPixels(){
      return pixelMatrix.size();
 }
 
-// void Image::writeAIP(const std::string& filename) const {
-//      std::ofstream file;
-//      file.open(filename + ".aip");
+void Image::writeAIP(const std::string& filename) const {
+     std::ofstream file;
+     file.open("./images/" + filename + ".aip");
 
-//      if (!file)
-//           throw std::runtime_error("error open file (writeAIP)");
+     if (!file)
+          throw std::runtime_error("error open file (writeAIP)");
 
 
-//      string widthOfMatrixSTD = to_string(width());
-//      string heightOfMatrixSTD = to_string(height());
-//      char test = heightOfMatrixSTD[0];
-//      cout <<"is the problem here? " << endl;
-//      // file << widthOfMatrixSTD[0]
-//      //      << widthOfMatrix.at(1)
-//      //      << ' ' 
-//      //      << heightOfMatrix.at(0)
-//      //      << heightOfMatrix.at(1);
-//      cout << "or here ?" << endl;
-//      // string test = "lolol";
-//      // char testing = test[0];
+     string widthString = to_string(width());
+     string heightString = to_string(height());
+     // char heightChars[heightString.length()];
+     // heightChars[0] = heightString[0];
+     // heightChars[1] = heightString[1];
+     // char widthChars[widthString.length()];
+     // widthChars[0] = widthString[0];
+     // widthChars[1] = widthString[1];
+     file << widthString
+          << ' '
+          << heightString;
 
-//      for (int i = 0; i < (int)pixelMatrix.size(); i++){
-//           if (i%width() == 0){
-//                file << endl;
-//           }
-//           //file << to_string(pixelMatrix.at(i).toInt())[0];
-//      }
+     
+     for (int i = 0; i < (int)pixelMatrix.size(); i++){
+          if (i%width() == 0){
+               file << endl;
+          }
+          file << to_string(pixelMatrix.at(i).toInt())[0];
+     }
 
-//      file.close();
-// }
+     file.close();
+}
 
 //bool operator==(const Image& img) const
 

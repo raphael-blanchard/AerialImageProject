@@ -40,8 +40,8 @@ int main(void)
   Image testingImage2 = Image::readAIP("amazonie_0.aip");
   testingImage2.DisplayImageInTerminal();
   testingImage2.writeSVG("firstfiletest", 20);
-  cout << "width of matrix is: " << testingImage2.getWidthOfMatrix("amazonie_0.aip") << endl;
-  cout << "height of matrix is: " << testingImage2.getHeightOfMatrix("amazonie_0.aip") << endl;
+  //cout << "width of matrix is: " << testingImage2.getWidthOfMatrix("amazonie_0.aip") << endl;
+  //cout << "height of matrix is: " << testingImage2.getHeightOfMatrix("amazonie_0.aip") << endl;
 
   int index = testingImage2.toIndex(2, 5);
   cout << "index is: " << index << endl;
