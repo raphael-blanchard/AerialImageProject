@@ -73,16 +73,29 @@ Image::Image(int w, int h)
      // O(w*h)
 }
 
+//why const here ?
+// Image::Image(const Image& img){
+//      assert (img.size() == size());
+//      //if can't assert this, do an if condition and push_back what's needed
+
+//      for (int i = 0; i < widthVal*heightVal; i++){
+//           img.setPixel(i, pixelMatrix.at(i));
+//      }
+// }
+
+//O(1)
 int Image::width() const
 {
      return widthVal;
 }
 
+//O(1)
 int Image::height() const
 {
      return heightVal;
 }
 
+//O(1)
 int Image::size() const
 {
      return heightVal * widthVal;
@@ -128,7 +141,7 @@ Image Image::readAIP(const std::string &filename)
      return tmpImage;
 }
 
-//
+//O(1)
 Color Image::getPixel(int i, int j) const
 {
      assert((0 <= i && i <= height()) && (0 <= j && j <= width()));
@@ -137,12 +150,30 @@ Color Image::getPixel(int i, int j) const
      return pixelMatrix.at(i * widthVal + j);
 }
 
+//O(1)
+Color Image::getPixel(int i) const
+{
+     assert(0 <= i && i <= height());
+     // i*widthVal + j will correspond to the pixel we are looking because:
+     //  i*widthVal will take us to
+     return pixelMatrix.at(i);
+}
+
+//O(1)
 void Image::setPixel(int i, int j, Color col)
 {
      assert((0 <= i && i < height()) && (0 <= j && j < width()));
      pixelMatrix.at(i * widthVal + j) = col;
 }
 
+//O(1)
+void Image::setPixel(int i, Color col)
+{
+     assert(0 <= i && i <= height());
+     pixelMatrix.at(i) = col;
+}
+
+//O(w*h)
 void Image::DisplayImageInTerminal()
 {
      for (int i = 0; i < heightVal * widthVal; i++)
@@ -282,6 +313,31 @@ bool Image::operator==(const Image& img) const{
           }
      }
      return true;
+}
+
+//override of the != operator for the object of the class Image
+//O(n) function in the worst case, Omeg(1) in best case when they don't have the same size
+bool Image::operator!=(const Image& img) const{
+     //check in a first time if the size of the img given has a different size of our object or not
+     //this is a O(1) function as size() uses the widthVal and heightVal of the Image class' objects, which is accessed in constant time
+     if (img.size() != size()){
+          return true;
+     }
+     for (int i = 0; i < size(); i++){
+          if (pixelMatrix.at(i) == img.pixelMatrix.at(i)){
+               return false;
+          }
+     }
+     return true;
+}
+
+//O(1) function to check if pixels at position (i1,j1) and (i2,j2) are consecutive pixels, in one way or the other
+bool Image::areConsecutivePixels(int i1, int j1, int i2, int j2){
+     assert (i1 < size() && j1 < size() && i2 < size() && j2 < size());
+     //as we are representing our matrix of pixels by a vector of Colors, we can just do i*widthVal + j and check the value if they are of by one
+     //first part of the if condition corresponds to checking if the pixel in position i1,j1 is the pixel just before the pixel at i2,j2
+     //second part of the condition corresponds to checking if the pixel in position i1,j1 is the pixel just after the pixel at i2,j2
+     return ((i1*widthVal+j1+1 == i2*widthVal+j2) || (i1*widthVal+j1 == i2*widthVal+j2+1));
 }
 
 // }

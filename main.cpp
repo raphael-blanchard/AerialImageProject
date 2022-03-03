@@ -20,41 +20,44 @@ int main(void)
 {
   srand(time(nullptr));
 
-  Image testingImage = Image(5, 10);
-  testingImage.setPixel(1, 2, Color::White);
-  testingImage.setPixel(2, 2, Color::Blue);
-  testingImage.DisplayImageInTerminal();
-  cout << "color that I got is: " << testingImage.getPixel(2, 2) << endl;
+  Image firstImage = Image(5, 10);
+  firstImage.setPixel(1, 2, Color::White);
+  firstImage.setPixel(2, 2, Color::Blue);
+  firstImage.DisplayImageInTerminal();
+  cout << "color that I got is: " << firstImage.getPixel(2, 2) << endl;
   for (int i = 1; i <= 6; i++)
   {
     for (int j = 1; j <= 5; j++)
     {
-      cout << "color of pixel is: " << testingImage.getPixel(i, j) << endl;
+      cout << "color of pixel is: " << firstImage.getPixel(i, j) << endl;
     }
   }
 
-  cout << testingImage.height() << endl
-       << testingImage.width() << endl
-       << testingImage.size() << endl;
+  cout << firstImage.height() << endl
+       << firstImage.width() << endl
+       << firstImage.size() << endl;
 
-  Image testingImage2 = Image::readAIP("amazonie_0.aip");
-  testingImage2.DisplayImageInTerminal();
-  testingImage2.writeSVG("firstfiletest", 20);
-  //cout << "width of matrix is: " << testingImage2.getWidthOfMatrix("amazonie_0.aip") << endl;
-  //cout << "height of matrix is: " << testingImage2.getHeightOfMatrix("amazonie_0.aip") << endl;
+  Image secondImage = Image::readAIP("amazonie_0.aip");
+  secondImage.DisplayImageInTerminal();
+  secondImage.writeSVG("firstfiletest", 20);
+  //cout << "width of matrix is: " << secondImage.getWidthOfMatrix("amazonie_0.aip") << endl;
+  //cout << "height of matrix is: " << secondImage.getHeightOfMatrix("amazonie_0.aip") << endl;
 
-  int index = testingImage2.toIndex(2, 5);
+  int index = secondImage.toIndex(2, 5);
   cout << "index is: " << index << endl;
-  std::pair<int, int> testingPair = testingImage2.toCoordinate(index);
+  std::pair<int, int> testingPair = secondImage.toCoordinate(index);
   cout << "the pair is: (" << testingPair.first << ", " << testingPair.second << ")" << endl;
-  cout << "nb of pixels inside is: " << testingImage2.getNumberOfPixels() << endl;
+  cout << "nb of pixels inside is: " << secondImage.getNumberOfPixels() << endl;
 
   string fileName = "amazonie1";
-  testingImage2.writeAIP(fileName);
-  Image testingImage3 = Image::readAIP(fileName + ".aip");
-  testingImage3.writeSVG(fileName + "svg", 20);
+  secondImage.writeAIP(fileName);
+  Image thirdImage = Image::readAIP(fileName + ".aip");
+  thirdImage.writeSVG(fileName + "svg", 20);
 
-  cout << "are the two images the same ?" << testingImage2==testingImage3 << endl;
+  //bool testingbool = (secondImage==firstImage);
+  cout << "are these pixels consecutive pixels? " << secondImage.areConsecutivePixels(1,49,1,50) << endl;
 
+  Image fourthImage = Image(thirdImage);
+  fourthImage.DisplayImageInTerminal();
   return 0;
 }

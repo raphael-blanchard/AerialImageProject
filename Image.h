@@ -30,7 +30,7 @@ public:
   //~Image();
 
   /// Copy constructor
-  //Image(const Image& img);
+  Image(const Image& img);
 
   /// No assignment
   Image& operator=(const Image& img) = delete;
@@ -48,10 +48,18 @@ public:
   /// 1 <= i <= height(), 1 <= j <= width()
   Color getPixel(int i, int j) const;
 
+  //override of the getPixel function but this time getting the pixel at index i in the vector of Colors
+  // 0 <= i <= width()*height()
+  Color getPixel(int i) const;
+
   /// Sets the pixel in the i-th row and j-th column
   /// 1 <= i <= height(), 1 <= j <= width()
   /// col is the new color
   void setPixel(int i, int j, Color col);
+
+  //override of the setPixel function but this time setting the pixel at index i
+  // 0 <= i <= width()*height()
+  void setPixel(int i, Color c);
 
   /// Maps a coordinate (i, j) to a unique identifier
   int toIndex(int i, int j) const;
@@ -74,7 +82,7 @@ public:
   /// Fills a rectangle in this with a given color
   /// (i1, j1) is the upper left corner
   /// (i2, j2) is the lower right corner
-  void fillRectangle(int i1, int j1, int i2, int j2, Color c);
+  //void fillRectangle(int i1, int j1, int i2, int j2, Color c);
   
   /// Generates a SVG image given a filename without the extension
   /// The file name is of this image is filename.svg
@@ -104,10 +112,10 @@ public:
   bool operator==(const Image& img) const;
 
   /// Returns true if this and img are different
-  //bool operator!=(const Image& img) const;
+  bool operator!=(const Image& img) const;
 
-  /// Returns true if (i1, j1) and (i2, j2) are two consecutive piels of this
-  //bool areConsecutivePixels(int i1, int j1, int i2, int j2);
+  /// Returns true if (i1, j1) and (i2, j2) are two consecutive pixels of this
+  bool areConsecutivePixels(int i1, int j1, int i2, int j2);
 
   //function to display a member of the Image class in the terminal
   void DisplayImageInTerminal();
