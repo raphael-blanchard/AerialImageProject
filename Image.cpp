@@ -239,31 +239,30 @@ int Image::getNumberOfPixels(){
 }
 
 void Image::writeAIP(const std::string& filename) const {
+     //creating an object of the ofstream class
      std::ofstream file;
+     //creating a file in the images directory, which is a necessary step as we implemented our functions such as every aip files is in this directory.
      file.open("./images/" + filename + ".aip");
 
+     //checking if the file hasn't been opened like it should have
      if (!file)
           throw std::runtime_error("error open file (writeAIP)");
 
 
-     string widthString = to_string(width());
-     string heightString = to_string(height());
-     // char heightChars[heightString.length()];
-     // heightChars[0] = heightString[0];
-     // heightChars[1] = heightString[1];
-     // char widthChars[widthString.length()];
-     // widthChars[0] = widthString[0];
-     // widthChars[1] = widthString[1];
-     file << widthString
+     //writing in the first line of the aip file the width and height of the Image we're working with.
+     file << to_string(width())
           << ' '
-          << heightString;
+          << to_string(height());
 
-     
+     //writing on each line of the aip file the value of the Color of each pixel
      for (int i = 0; i < (int)pixelMatrix.size(); i++){
+          //if condition needed as we represent our matrix of pixels by a single vector of Colors
+          //if i%width=0 that means we are at the next line of the file. 
+          //ex: if the width is 10, the color at pixelMatrix.at(10) is the first pixel of the second row because 10 = 10*1 + 0 
           if (i%width() == 0){
                file << endl;
           }
-          file << to_string(pixelMatrix.at(i).toInt())[0];
+          file << to_string(pixelMatrix.at(i).toInt());
      }
 
      file.close();
