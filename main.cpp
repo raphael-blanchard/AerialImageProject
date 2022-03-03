@@ -54,5 +54,7 @@ int main(void)
   Image testingImage3 = Image::readAIP(fileName + ".aip");
   testingImage3.writeSVG(fileName + "svg", 20);
 
+  cout << "are the two images the same ?" << testingImage2==testingImage3 << endl;
+
   return 0;
 }

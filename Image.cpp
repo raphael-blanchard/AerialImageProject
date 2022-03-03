@@ -268,6 +268,20 @@ void Image::writeAIP(const std::string& filename) const {
      file.close();
 }
 
-//bool operator==(const Image& img) const
+//override of the == operator for the object of the class Image
+//O(n) function in the worst case, Omeg(1) in best case when they don't have the same size
+bool Image::operator==(const Image& img) const{
+     //check in a first time if the size of the img given has a different size of our object or not
+     //this is a O(1) function as size() uses the widthVal and heightVal of the Image class' objects, which is accessed in constant time
+     if (img.size() != size()){
+          return false;
+     }
+     for (int i = 0; i < size(); i++){
+          if (pixelMatrix.at(i) != img.pixelMatrix.at(i)){
+               return false;
+          }
+     }
+     return true;
+}
 
 // }
