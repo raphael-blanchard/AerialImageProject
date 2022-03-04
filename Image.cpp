@@ -73,15 +73,21 @@ Image::Image(int w, int h)
      // O(w*h)
 }
 
-//why const here ?
-// Image::Image(const Image& img){
-//      assert (img.size() == size());
-//      //if can't assert this, do an if condition and push_back what's needed
-
-//      for (int i = 0; i < widthVal*heightVal; i++){
-//           img.setPixel(i, pixelMatrix.at(i));
-//      }
+// Image::Image(){
+//      widthVal = 0;
+//      heightVal = 0;
 // }
+
+Image::Image(const Image& img){
+     // assert (img.size() == size());
+     //if can't assert this, do an if condition and push_back what's needed
+     widthVal = img.width();
+     heightVal = img.height();
+
+     for (int i = 0; i < widthVal*heightVal; i++){
+          pixelMatrix.push_back(img.getPixel(i));
+     }
+}
 
 //O(1)
 int Image::width() const
@@ -93,6 +99,14 @@ int Image::width() const
 int Image::height() const
 {
      return heightVal;
+}
+
+void Image::setHeight(int n) {
+     heightVal = n;
+}
+
+void Image::setWidth(int n){
+     widthVal = n;
 }
 
 //O(1)
@@ -153,7 +167,7 @@ Color Image::getPixel(int i, int j) const
 //O(1)
 Color Image::getPixel(int i) const
 {
-     assert(0 <= i && i <= height());
+     assert(0 <= i && i <= height()*width());
      // i*widthVal + j will correspond to the pixel we are looking because:
      //  i*widthVal will take us to
      return pixelMatrix.at(i);
@@ -169,7 +183,7 @@ void Image::setPixel(int i, int j, Color col)
 //O(1)
 void Image::setPixel(int i, Color col)
 {
-     assert(0 <= i && i <= height());
+     assert(0 <= i && i < height()*width());
      pixelMatrix.at(i) = col;
 }
 
@@ -349,4 +363,7 @@ void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
      }
 }
 
+void Image::addPixel(Color c){
+     pixelMatrix.push_back(c);
+}
 // }

@@ -52,7 +52,13 @@ int main(void)
   //Image fourthImage = Image(thirdImage);
   firstImage.DisplayImageInTerminal();
   cout << endl;
-  //firstImage.fillRectangle(3,3,6,9,Color::Red);
-  firstImage.DisplayImageInTerminal();
+  firstImage.fillRectangle(3,3,6,9,Color::Red);
+  //firstImage.DisplayImageInTerminal();
+
+  Image fourthImage(firstImage);
+
+  Analyst firstAnalyst = Analyst(secondImage);
+  firstAnalyst.getImage().DisplayImageInTerminal();
+  
   return 0;
 }

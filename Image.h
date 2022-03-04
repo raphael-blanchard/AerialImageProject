@@ -26,6 +26,8 @@ public:
   /// w is the width of this image, h is its height
   Image(int w, int h);
 
+  Image();
+
   /// Destructor
   //not needed
   //~Image();
@@ -41,6 +43,10 @@ public:
 
   /// Returns the height of this
   int height() const;
+
+  void setWidth(int n) ;
+
+  void setHeight(int n) ;
 
   /// Returns the number of pixels of this
   int size() const;
@@ -127,6 +133,9 @@ public:
   static int getWidthOfMatrix(const std::string &filename);
 
   int getNumberOfPixels();
+
+  //function to add a pixel to the pixel matrix of an image
+  void addPixel(Color c);
 
 private:
 

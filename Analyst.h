@@ -11,6 +11,7 @@
 
 #include <set>
 #include "Image.h"
+#include <unordered_map>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// This is an analyst of images.
@@ -18,16 +19,19 @@
 /// An analyst is able to see that an image is composed of different zones.
 /// A zone is a connected set of pixels having the same color.
 ////////////////////////////////////////////////////////////////////////////////
-class Analyst {
+class Analyst
+{
 public:
   /// Creates an analyst of a given image
-  //Analyst(const Image& img);
+  Analyst(const Image& img);
 
   /// No copy
-  Analyst(const Analyst&) = delete;
+  //Analyst(const Analyst &) = delete;
 
   /// No assignment
-  Analyst& operator=(const Analyst&) = delete;
+  Analyst &operator=(const Analyst &) = delete;
+
+  Image getImage() const;
 
   /// Destructor
   //~Analyst();
@@ -53,9 +57,9 @@ public:
   //std::set<int> zoneOfPixel(int i, int j);
 
 private:
-
-
-
+  //creating a HashMap using Colors as keys and sets of integers as values
+  unordered_map<int, set<int> > mapOfSets;
+  Image analyzedImage;
 };
 
 #endif
