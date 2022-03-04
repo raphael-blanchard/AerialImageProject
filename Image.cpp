@@ -109,6 +109,10 @@ void Image::setWidth(int n){
      widthVal = n;
 }
 
+vector<Color> Image::getVectorOfColors(){
+     return pixelMatrix;
+}
+
 //O(1)
 int Image::size() const
 {

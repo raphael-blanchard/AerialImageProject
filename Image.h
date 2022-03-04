@@ -51,6 +51,9 @@ public:
   /// Returns the number of pixels of this
   int size() const;
 
+  //returns the vector of Colors
+  vector<Color> getVectorOfColors();
+
   /// Gets the pixel in the i-th row and j-th column
   /// 1 <= i <= height(), 1 <= j <= width()
   Color getPixel(int i, int j) const;

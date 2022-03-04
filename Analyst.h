@@ -58,7 +58,6 @@ public:
 
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
-  unordered_map<int, set<int> > mapOfSets;
   Image analyzedImage;
 };
 
