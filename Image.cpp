@@ -340,4 +340,13 @@ bool Image::areConsecutivePixels(int i1, int j1, int i2, int j2){
      return ((i1*widthVal+j1+1 == i2*widthVal+j2) || (i1*widthVal+j1 == i2*widthVal+j2+1));
 }
 
+void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
+     assert(0<=i1 && i1<widthVal && 0<=i2 && i2<widthVal && 0<=j1 && j1<heightVal && 0<=j2 && j2<heightVal);
+     for (int i = i1*widthVal+j1-1 ; i <= i2*widthVal+j2; i++){
+          if (i%widthVal<=j2 && i%widthVal>=i1){
+               pixelMatrix.at(i) = c;
+          }
+     }
+}
+
 // }

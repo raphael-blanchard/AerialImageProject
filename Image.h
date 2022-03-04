@@ -27,6 +27,7 @@ public:
   Image(int w, int h);
 
   /// Destructor
+  //not needed
   //~Image();
 
   /// Copy constructor
@@ -82,7 +83,7 @@ public:
   /// Fills a rectangle in this with a given color
   /// (i1, j1) is the upper left corner
   /// (i2, j2) is the lower right corner
-  //void fillRectangle(int i1, int j1, int i2, int j2, Color c);
+  void fillRectangle(int i1, int j1, int i2, int j2, Color c);
   
   /// Generates a SVG image given a filename without the extension
   /// The file name is of this image is filename.svg

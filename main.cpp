@@ -20,18 +20,10 @@ int main(void)
 {
   srand(time(nullptr));
 
-  Image firstImage = Image(5, 10);
+  Image firstImage = Image(10, 10);
   firstImage.setPixel(1, 2, Color::White);
   firstImage.setPixel(2, 2, Color::Blue);
   firstImage.DisplayImageInTerminal();
-  cout << "color that I got is: " << firstImage.getPixel(2, 2) << endl;
-  for (int i = 1; i <= 6; i++)
-  {
-    for (int j = 1; j <= 5; j++)
-    {
-      cout << "color of pixel is: " << firstImage.getPixel(i, j) << endl;
-    }
-  }
 
   cout << firstImage.height() << endl
        << firstImage.width() << endl
@@ -57,7 +49,10 @@ int main(void)
   //bool testingbool = (secondImage==firstImage);
   cout << "are these pixels consecutive pixels? " << secondImage.areConsecutivePixels(1,49,1,50) << endl;
 
-  Image fourthImage = Image(thirdImage);
-  fourthImage.DisplayImageInTerminal();
+  //Image fourthImage = Image(thirdImage);
+  firstImage.DisplayImageInTerminal();
+  cout << endl;
+  //firstImage.fillRectangle(3,3,6,9,Color::Red);
+  firstImage.DisplayImageInTerminal();
   return 0;
 }
