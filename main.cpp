@@ -57,7 +57,7 @@ int main(void)
 
   Image fourthImage(firstImage);
 
-  Analyst firstAnalyst = Analyst(secondImage);
+  Analyst firstAnalyst = Analyst(firstImage);
   firstAnalyst.getImage().DisplayImageInTerminal();
   
   return 0;

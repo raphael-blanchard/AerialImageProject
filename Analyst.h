@@ -8,9 +8,9 @@
 
 #ifndef ANALYST_H
 #define ANALYST_H
-
-#include <set>
 #include "Image.h"
+#include <set>
+
 #include <unordered_map>
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -73,10 +73,10 @@ Image::Image(int w, int h)
      // O(w*h)
 }
 
-// Image::Image(){
-//      widthVal = 0;
-//      heightVal = 0;
-// }
+Image::Image(){
+     widthVal = 0;
+     heightVal = 0;
+}
 
 Image::Image(const Image& img){
      // assert (img.size() == size());
