@@ -22,7 +22,7 @@ int main(void)
     {
       auto start = chrono::system_clock::now();
 
-      Image img = Image::readAIP(name);
+      Image img = Image::readAIP(name + ".aip");
       Analyst analyst(img);
 
       cout << analyst.nbZones()

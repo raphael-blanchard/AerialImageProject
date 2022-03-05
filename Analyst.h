@@ -38,16 +38,16 @@ public:
 
   /// Tests if the pixels (i1, j1) and (i2, j2) of the input image
   /// are in the same zone
-  //bool belongToTheSameZone(int i1, int j1, int i2, int j2);
+  bool belongToTheSameZone(int i1, int j1, int i2, int j2);
 
   /// Returns the number of pixels of a given color in the input image
-  //int nbPixelsOfColor(Color c) const;
+  int nbPixelsOfColor(Color c) const;
 
   /// Returns the number of zones of a given color in the input image
-  //int nbZonesOfColor(Color c) const;
+  int nbZonesOfColor(Color c) const;
 
   /// Returns the number of zones in the input image
-  //int nbZones() const;
+  int nbZones() const;
 
   /// Creates a new image by filling the zone of pixel (i, j) in the input
   /// image with a given color
@@ -62,12 +62,12 @@ public:
   //making the function static to be able to use it in the fillZone function
   void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
 
-  void fillZoneAnalyst();
-  void fillZoneDFSAnalyst(set<int> &givenSet, int i, int j, Color c);
+  void floodFill();
+  void floodFillRec(set<int> &givenSet, int i, int j, Color c);
 
 
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
-  //std::set<int> zoneOfPixel(int i, int j);
+  std::set<int> zoneOfPixel(int i, int j);
 
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
