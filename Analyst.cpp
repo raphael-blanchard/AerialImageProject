@@ -95,22 +95,18 @@ void Analyst::fillZoneAnalyst()
     set<int> tmpSet;
     for (int i = 0; i < (int)analyzedImage.height(); i++)
     {
-        tmpSet = {};
+
         for (int j = 0; j < (int)analyzedImage.width(); j++)
         {
-            fillZoneDFSAnalyst(tmpSet, i, j, analyzedImage.getPixel(i,j));
+            tmpSet = {};
+            fillZoneDFSAnalyst(tmpSet, i, j, analyzedImage.getPixel(i, j));
+            if (tmpSet.size() > 0)
+            {
+                vectOfSets.push_back(tmpSet);
+            }
         }
-        vectOfSets.push_back(tmpSet);
     }
-
-    for (int i = 0; i < (int)vectOfSets.size(); i++)
-    {
-        for (int item : vectOfSets.at(i))
-        {
-            cout << item << " ";
-        }
-        cout << "new set" << endl;
-    }
+    cout << "there are " << vectOfSets.size() << " zones in the image." << endl;
 
     // //to display the matrix
     //  for (int i = 0; i < (int)matrixOfColorAndBool.size(); i++)
@@ -119,17 +115,16 @@ void Analyst::fillZoneAnalyst()
     //        {
     //             cout << endl;
     //        }
-    //        cout << matrixOfColorAndBool.at(i).first.toInt() << ":" << matrixOfColorAndBool.at(i).second << " ";
+    //        cout << matrixOfColorAndBool.at(i).first.toInt() << "" << matrixOfColorAndBool.at(i).second << " ";
     //   }
     //   cout << endl;
-
 }
 
 void Analyst::fillZoneDFSAnalyst(set<int> &givenSet, int i, int j, Color c)
 {
     int widthOfMatrix = analyzedImage.width();
     // int heightOfMatrix = analyzedImage.height();
-    if (i < 0 || i >= analyzedImage.height() || j < 0 || j >= analyzedImage.width() || matrixOfColorAndBool.at(i * widthOfMatrix + j).second == 1 ||matrixOfColorAndBool.at(i * widthOfMatrix + j).first != c)
+    if (i < 0 || i >= analyzedImage.height() || j < 0 || j >= analyzedImage.width() || matrixOfColorAndBool.at(i * widthOfMatrix + j).second == 1 || matrixOfColorAndBool.at(i * widthOfMatrix + j).first != c)
     {
         // if the condition is true, it means we either can't go on or don't want to go on, so we get out of the program
         return;

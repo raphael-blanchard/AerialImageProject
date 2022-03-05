@@ -53,15 +53,16 @@ int main(void)
   firstImage.DisplayImageInTerminal();
   cout << endl;
   firstImage.fillRectangle(3,3,6,9,Color::Red);
+  firstImage.fillRectangle(4,5,5,8,Color::Black);
   //firstImage.DisplayImageInTerminal();
 
   Image fourthImage(firstImage);
 
-  Analyst firstAnalyst = Analyst(firstImage);
+  Analyst firstAnalyst = Analyst(thirdImage);
   firstAnalyst.getImage().DisplayImageInTerminal();
   cout <<endl;
 
-  //firstAnalyst.fillZone(3,3, Color::Green).DisplayImageInTerminal();
+  //firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
   firstAnalyst.fillZoneAnalyst();
   return 0;
 }
