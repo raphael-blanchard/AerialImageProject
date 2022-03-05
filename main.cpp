@@ -61,7 +61,7 @@ int main(void)
   firstAnalyst.getImage().DisplayImageInTerminal();
   cout <<endl;
 
-  firstAnalyst.fillZone(3,3, Color::Green).DisplayImageInTerminal();
-  
+  //firstAnalyst.fillZone(3,3, Color::Green).DisplayImageInTerminal();
+  firstAnalyst.fillZoneAnalyst();
   return 0;
 }

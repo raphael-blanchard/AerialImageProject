@@ -60,7 +60,10 @@ public:
   //which is essential to make the DFS work
   //It doesn't change the completion of the algorithm as I'll call the fillZoneDFS in the fillZone function though.
   //making the function static to be able to use it in the fillZone function
-  static void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
+  void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
+
+  void fillZoneAnalyst();
+  void fillZoneDFSAnalyst(set<int> &givenSet, int i, int j, Color c);
 
 
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
@@ -69,6 +72,7 @@ public:
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
   Image analyzedImage;
+  vector < pair<Color, bool> > matrixOfColorAndBool;
   //used to store in the sets of colors of the same zone
   //it'll be modified directly in the constructor, that way I can do some simple operations on the set later on for other functions
   vector< set<int> > vectOfSets;
