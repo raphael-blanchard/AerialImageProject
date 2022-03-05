@@ -59,6 +59,9 @@ int main(void)
 
   Analyst firstAnalyst = Analyst(firstImage);
   firstAnalyst.getImage().DisplayImageInTerminal();
+  cout <<endl;
+
+  firstAnalyst.fillZone(3,3, Color::Green).DisplayImageInTerminal();
   
   return 0;
 }

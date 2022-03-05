@@ -51,7 +51,17 @@ public:
 
   /// Creates a new image by filling the zone of pixel (i, j) in the input
   /// image with a given color
-  //Image fillZone(int i, int j, Color c);
+  Image fillZone(int i, int j, Color c);
+  //function that will call the fillZoneDFS
+
+
+  //function that will do the fill zone by doing a DFS across the image
+  //created this function as the signature of the simple fillZone wouldn't let me use the argument previousColor nor tmpImage
+  //which is essential to make the DFS work
+  //It doesn't change the completion of the algorithm as I'll call the fillZoneDFS in the fillZone function though.
+  //making the function static to be able to use it in the fillZone function
+  static void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
+
 
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
   //std::set<int> zoneOfPixel(int i, int j);
@@ -59,6 +69,9 @@ public:
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
   Image analyzedImage;
+  //used to store in the sets of colors of the same zone
+  //it'll be modified directly in the constructor, that way I can do some simple operations on the set later on for other functions
+  vector< set<int> > vectOfSets;
 };
 
 #endif
