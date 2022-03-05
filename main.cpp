@@ -29,7 +29,7 @@ int main(void)
        << firstImage.width() << endl
        << firstImage.size() << endl;
 
-  Image secondImage = Image::readAIP("amazonie_0.aip");
+  Image secondImage = Image::readAIP("img0.aip");
   secondImage.DisplayImageInTerminal();
   secondImage.writeSVG("firstfiletest", 20);
   // cout << "width of matrix is: " << secondImage.getWidthOfMatrix("amazonie_0.aip") << endl;
