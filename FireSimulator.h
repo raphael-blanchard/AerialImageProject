@@ -25,6 +25,9 @@ public:
 
 private:
 
+//image
+//time counter
+//vectOfImage maybe
 };
 
 #endif
