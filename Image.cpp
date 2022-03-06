@@ -126,7 +126,7 @@ Image Image::readAIP(const std::string &filename)
      // Create a text string, which is used to manipulate the AIP file
      string myText;
      // Create and open a AIP file via an object from the ifstream class
-     ifstream MyReadFile("./images/" + filename);
+     ifstream MyReadFile("./images/" + filename + ".aip");
 
      // re
      getline(MyReadFile, myText);
@@ -211,7 +211,7 @@ int Image::getHeightOfMatrix(const std::string &filename)
      // Create a text string, which is used to manipulate the AIP file
      string myText;
      // Create and open a AIP file via an object from the ifstream class
-     ifstream MyReadFile("./images/" + filename);
+     ifstream MyReadFile("./images/" + filename + ".aip");
 
      getline(MyReadFile, myText);
      int i;
@@ -238,7 +238,7 @@ int Image::getWidthOfMatrix(const std::string &filename)
      // Create a text string, which is used to manipulate the AIP file
      string myText;
      // Create and open a AIP file via an object from the ifstream class
-     ifstream MyReadFile("./images/" + filename);
+     ifstream MyReadFile("./images/" + filename+ ".aip" );
 
      getline(MyReadFile, myText);
      cout << "width of matrix is " << myText << endl;

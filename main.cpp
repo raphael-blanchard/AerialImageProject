@@ -29,7 +29,7 @@ int main(void)
        << firstImage.width() << endl
        << firstImage.size() << endl;
 
-  Image secondImage = Image::readAIP("img0.aip");
+  Image secondImage = Image::readAIP("img0");
   secondImage.DisplayImageInTerminal();
   secondImage.writeSVG("firstfiletest", 20);
   // cout << "width of matrix is: " << secondImage.getWidthOfMatrix("amazonie_0.aip") << endl;
@@ -43,7 +43,7 @@ int main(void)
 
   string fileName = "amazonie1";
   secondImage.writeAIP(fileName);
-  Image thirdImage = Image::readAIP(fileName + ".aip");
+  Image thirdImage = Image::readAIP(fileName);
   thirdImage.writeSVG(fileName + "svg", 20);
 
   // bool testingbool = (secondImage==firstImage);
