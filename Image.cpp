@@ -241,7 +241,7 @@ int Image::getWidthOfMatrix(const std::string &filename)
      ifstream MyReadFile("./images/" + filename+ ".aip" );
 
      getline(MyReadFile, myText);
-     cout << "width of matrix is " << myText << endl;
+     //cout << "width of matrix is " << myText << endl;
      int i;
      for (i = 0; i < (int)myText.length(); i++)
      {

@@ -73,6 +73,9 @@ int main(void)
     cout << item << " ";
   }
 
+  // Image onethousand = Image(1000,1000);
+  // onethousand.writeAIP("img10");
+
   cout << endl;
 
   return 0;
