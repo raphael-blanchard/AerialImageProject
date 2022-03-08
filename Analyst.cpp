@@ -30,6 +30,8 @@ Analyst::Analyst(const Image &img)
         matrixOfColorAndBool.push_back(tmpPair);
     }
 
+    //O(w*h * z), z being the number of zones in the image. 
+    //the worst case being when the image is a chess board, it's equivalent to O(w^2 * h^2) 
     floodFill();
 }
 
@@ -205,10 +207,12 @@ int Analyst::nbZonesOfColor(Color c) const
     return totalNbOfZones;
 }
 
+
 int Analyst::nbZones() const
 {
     // simply returning the size of the vect containing the sets, since every set is one zone
     return vectOfSets.size();
+    //O(1) operation
 }
 
 set<int> Analyst::zoneOfPixel(int i, int j)
