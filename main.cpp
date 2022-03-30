@@ -58,7 +58,9 @@ int main(void)
 
   Image fourthImage(firstImage);
 
-  Analyst firstAnalyst = Analyst(thirdImage);
+  Image onethousand = Image(1000,1000);
+  onethousand.writeAIP("img10");
+  Analyst firstAnalyst = Analyst(onethousand);
   firstAnalyst.getImage().DisplayImageInTerminal();
   cout << endl;
 
@@ -73,8 +75,7 @@ int main(void)
     cout << item << " ";
   }
 
-  // Image onethousand = Image(1000,1000);
-  // onethousand.writeAIP("img10");
+
 
   cout << endl;
 

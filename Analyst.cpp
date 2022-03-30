@@ -93,24 +93,45 @@ void Analyst::floodFillRec(set<int> &givenSet, int i, int j, Color c)
 {
     int widthOfMatrix = analyzedImage.width();
     int heightOfMatrix = analyzedImage.height();
-    if (i < 0 || i >= heightOfMatrix || j < 0 || j >= widthOfMatrix || matrixOfColorAndBool.at(i * widthOfMatrix + j).second == 1 || matrixOfColorAndBool.at(i * widthOfMatrix + j).first != c)
-    {
-        // if the condition is true, it means we either can't go on or don't want to go on, so we get out of the program
-        return;
-    }
-
-    // setting the bool of the pixel we're looking at to visited
-    matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
-    // adding the index of the pixel we're looking at into the given set
-    givenSet.insert(analyzedImage.toIndex(i, j));
+    // if (i < 0 || i >= heightOfMatrix || j < 0 || j >= widthOfMatrix || matrixOfColorAndBool.at(i * widthOfMatrix + j).second == 1 || matrixOfColorAndBool.at(i * widthOfMatrix + j).first != c)
+    // {
+    //     // if the condition is true, it means we either can't go on or don't want to go on, so we get out of the program
+    //     return;
+    // }
 
     // recursive calls of the function that will realize what we mean by flood fill, it'll look at the pixels around the pixel we're starting from,
     // and then look at the pixel around these pixels etc etc... until we went through the entire image.
-    floodFillRec(givenSet, i - 1, j, c);
-    floodFillRec(givenSet, i + 1, j, c);
-    floodFillRec(givenSet, i, j - 1, c);
-    floodFillRec(givenSet, i, j + 1, c);
+    if ((i-1>=0) && (i-1 < heightOfMatrix) && (j >=0 ) && ( j < widthOfMatrix) && (matrixOfColorAndBool.at((i-1)* widthOfMatrix + j).second==0) && (matrixOfColorAndBool.at((i-1)* widthOfMatrix + j).first== c)){
+                // setting the bool of the pixel we're looking at to visited
+        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
+        // adding the index of the pixel we're looking at into the given set
+        givenSet.insert(analyzedImage.toIndex(i, j));
+        floodFillRec(givenSet, i - 1, j, c);
+    }
+    if ((i+1>=0) && (i+1 < heightOfMatrix) && (j >=0 ) && ( j < widthOfMatrix) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).second==0) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).first==c)){
+        // setting the bool of the pixel we're looking at to visited
+        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
+        // adding the index of the pixel we're looking at into the given set
+        givenSet.insert(analyzedImage.toIndex(i, j));
+        floodFillRec(givenSet, i + 1, j, c);
+    }
+    if ((i>=0) && (i < heightOfMatrix) && (j-1 >=0 ) && ( j-1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).first== c)){
+        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
+        // adding the index of the pixel we're looking at into the given set
+        givenSet.insert(analyzedImage.toIndex(i, j));
+        floodFillRec(givenSet, i, j - 1, c);
+    }
+    if ((i>=0) && (i < heightOfMatrix) && (j+1 >=0 ) && ( j+1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).first== c)){
 
+        // setting the bool of the pixel we're looking at to visited
+        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
+        // adding the index of the pixel we're looking at into the given set
+        givenSet.insert(analyzedImage.toIndex(i, j));
+        floodFillRec(givenSet, i, j + 1, c);
+    }
+
+
+    return;
     // this function will ultimately start from a pixel, and insert into the set the index of every pixel in the same zone as the starting pixel.
     // the goal is to run this function for every pixel of the image.
 
@@ -133,16 +154,17 @@ void Analyst::floodFill()
         for (int j = 0; j < (int)analyzedImage.width(); j++)
         {
             // initializing the set to an empty set for every iteration of the function
-            tmpSet = {};
+            //tmpSet = {};
             // calling the floodFillRec function on the pixel at position (i, j)
             floodFillRec(tmpSet, i, j, analyzedImage.getPixel(i, j));
             // at this point, tmpSet has been modified by the floodFillRec if it needed to be modified (aka if there was other pixels in the same zone as the pixel at position (i, j))
             // if the size of the set is not > 0, it means nothing has been added, which means we don't need to add it to our sets of indexes.
-            if (tmpSet.size() > 0)
+            if (tmpSet.size() > 1)
             {
                 // adding the set of indexes of pixels to our vector of sets, that will later get used in other functions.
                 vectOfSets.push_back(tmpSet);
             }
+            tmpSet.clear();
         }
     }
 
