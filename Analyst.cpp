@@ -108,6 +108,7 @@ void Analyst::floodFillRec(set<int> &givenSet, int i, int j, Color c)
         givenSet.insert(analyzedImage.toIndex(i, j));
         floodFillRec(givenSet, i - 1, j, c);
     }
+    
     if ((i+1>=0) && (i+1 < heightOfMatrix) && (j >=0 ) && ( j < widthOfMatrix) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).second==0) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).first==c)){
         // setting the bool of the pixel we're looking at to visited
         matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
@@ -115,12 +116,14 @@ void Analyst::floodFillRec(set<int> &givenSet, int i, int j, Color c)
         givenSet.insert(analyzedImage.toIndex(i, j));
         floodFillRec(givenSet, i + 1, j, c);
     }
+
     if ((i>=0) && (i < heightOfMatrix) && (j-1 >=0 ) && ( j-1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).first== c)){
         matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
         // adding the index of the pixel we're looking at into the given set
         givenSet.insert(analyzedImage.toIndex(i, j));
         floodFillRec(givenSet, i, j - 1, c);
     }
+
     if ((i>=0) && (i < heightOfMatrix) && (j+1 >=0 ) && ( j+1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).first== c)){
         // setting the bool of the pixel we're looking at to visited
         matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;

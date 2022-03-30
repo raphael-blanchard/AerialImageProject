@@ -12,6 +12,7 @@
 #include <vector>
 #include "Image.h"
 #include "Analyst.h"
+#include <queue>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// This is a fire simulator.
@@ -22,12 +23,35 @@
 class FireSimulator {
 public:
 
+FireSimulator(const Analyst& givenAnalyst);
+
+//lets us go to the next step (t = t+1)
+void nextStep();
+
+//uses the nextStep function n times to advance by n steps (t = t + n at the end)
+void advanceByNSteps(int n);
+
+//returns the image at step n from beginning (at t = n)
+Image getImageOfStepN(int n);
+
+//modif the modified image
+//clears the queue
+void resetStateToInitial();
+
 
 private:
+//will be used to store the index of all of the pixels that are part of forest zones (aka zones of green pixels)
+vector<int> vectorOfForestPixels;
 
-//image
-//time counter
-//vectOfImage maybe
+//queue that will store vectors of pixels that have been burnt by time
+queue<vector<int>> queueOfBurntPixels;
+//used to keep track of the initial situation
+Image initialImage;
+//used to move in time
+Image modifiedImage;
+//used to get the forest zones and to keep track of the zones while it burns
+Analyst fireAnalyst;
+
 };
 
 #endif

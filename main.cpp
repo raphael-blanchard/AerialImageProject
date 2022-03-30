@@ -76,7 +76,7 @@ int main(void)
   }
 
   Image randomImage = makeRandomImage(10,10);
-  randomImage.DisplayImageInTerminal();
+  FireSimulator tmpSimulator = FireSimulator(randomImage);
 
 
   cout << endl;
