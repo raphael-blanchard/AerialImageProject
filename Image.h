@@ -166,6 +166,6 @@ private:
 
 /// Generates an image of width w and height h such that each pixel is
 /// selected randomly.
-//Image makeRandomImage(int w, int h);
+Image makeRandomImage(int w, int h);
 
 #endif

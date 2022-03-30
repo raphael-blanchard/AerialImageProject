@@ -60,7 +60,7 @@ int main(void)
 
   Image onethousand = Image(1000,1000);
   onethousand.writeAIP("img10");
-  Analyst firstAnalyst = Analyst(onethousand);
+  Analyst firstAnalyst = Analyst(makeRandomImage(200,200));
   firstAnalyst.getImage().DisplayImageInTerminal();
   cout << endl;
 
@@ -75,6 +75,8 @@ int main(void)
     cout << item << " ";
   }
 
+  Image randomImage = makeRandomImage(10,10);
+  randomImage.DisplayImageInTerminal();
 
 
   cout << endl;

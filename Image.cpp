@@ -370,4 +370,14 @@ void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
 void Image::addPixel(Color c){
      pixelMatrix.push_back(c);
 }
+
+Image makeRandomImage(int w, int h){
+     Image tmpImage = Image(w, h);
+     for (int i = 0; i < w*h; i++){
+          int randomInt = rand() % Color::nbColors();
+          Color randomColor = Color::makeColor(randomInt);
+          tmpImage.setPixel(i, randomColor);
+     }
+     return tmpImage;
+}
 // }
