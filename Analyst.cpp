@@ -122,7 +122,6 @@ void Analyst::floodFillRec(set<int> &givenSet, int i, int j, Color c)
         floodFillRec(givenSet, i, j - 1, c);
     }
     if ((i>=0) && (i < heightOfMatrix) && (j+1 >=0 ) && ( j+1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).first== c)){
-
         // setting the bool of the pixel we're looking at to visited
         matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
         // adding the index of the pixel we're looking at into the given set
