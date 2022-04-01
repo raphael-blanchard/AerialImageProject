@@ -61,7 +61,7 @@ int main(void)
   Image onethousand = Image(1000,1000);
   onethousand.writeAIP("img10");
   Analyst firstAnalyst = Analyst(makeRandomImage(200,200));
-  firstAnalyst.getImage().DisplayImageInTerminal();
+  //firstAnalyst.getImage().DisplayImageInTerminal();
   cout << endl;
 
   // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
@@ -76,6 +76,9 @@ int main(void)
   }
 
   Image randomImage = makeRandomImage(10,10);
+  Image blackTest = Image(10,10);
+  randomImage.writeSVG("randomImage", 20);
+  randomImage.DisplayImageInTerminal();
   FireSimulator tmpSimulator = FireSimulator(randomImage);
 
 

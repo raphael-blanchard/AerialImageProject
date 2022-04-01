@@ -44,9 +44,9 @@ public:
   /// Returns the height of this
   int height() const;
 
-  void setWidth(int n) ;
+  // void setWidth(int n) ;
 
-  void setHeight(int n) ;
+  // void setHeight(int n) ;
 
   /// Returns the number of pixels of this
   int size() const;
@@ -138,7 +138,7 @@ public:
   int getNumberOfPixels();
 
   //function to add a pixel to the pixel matrix of an image
-  void addPixel(Color c);
+  //void addPixel(Color c);
 
 private:
 

@@ -34,9 +34,9 @@ void Image::writeSVG(const std::string &filename, int pixelSize) const
           << "\">"
           << std::endl;
 
-     for (int i = 1; i < height(); ++i)
+     for (int i = 1; i <= height(); ++i)
      {
-          for (int j = 1; j < width(); ++j)
+          for (int j = 1; j <= width(); ++j)
           {
                file << "<rect width=\""
                     << pixelSize
@@ -101,13 +101,13 @@ int Image::height() const
      return heightVal;
 }
 
-void Image::setHeight(int n) {
-     heightVal = n;
-}
+// void Image::setHeight(int n) {
+//      heightVal = n;
+// }
 
-void Image::setWidth(int n){
-     widthVal = n;
-}
+// void Image::setWidth(int n){
+//      widthVal = n;
+// }
 
 vector<Color> Image::getVectorOfColors(){
      return pixelMatrix;
@@ -162,19 +162,19 @@ Image Image::readAIP(const std::string &filename)
 //O(1)
 Color Image::getPixel(int i, int j) const
 {
-     assert((0 <= i && i <= height()) && (0 <= j && j <= width()));
+     assert((1 <= i && i <= height()) && (1 <= j && j <= width()));
      // i*widthVal + j will correspond to the pixel we are looking because:
      //  i*widthVal will take us to
-     return pixelMatrix.at(i * widthVal + j);
+     return pixelMatrix.at((i-1) * widthVal + j-1);
 }
 
 //O(1)
 Color Image::getPixel(int i) const
 {
-     assert(0 <= i && i <= height()*width());
+     assert(1 <= i && i <= height()*width());
      // i*widthVal + j will correspond to the pixel we are looking because:
      //  i*widthVal will take us to
-     return pixelMatrix.at(i);
+     return pixelMatrix.at(i-1);
 }
 
 //O(1)
@@ -367,9 +367,9 @@ void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
      }
 }
 
-void Image::addPixel(Color c){
-     pixelMatrix.push_back(c);
-}
+// void Image::addPixel(Color c){
+//      pixelMatrix.push_back(c);
+// }
 
 Image makeRandomImage(int w, int h){
      Image tmpImage = Image(w, h);

@@ -13,18 +13,5 @@
 
 FireSimulator::FireSimulator(const Image& givenImage) : fireAnalyst(givenImage) {
 
-    //make initialImage = givenImage
-    initialImage.setWidth(givenAnalyst.getImage().width());
-    initialImage.setHeight(givenAnalyst.getImage().height());
-
-    for (int i = 0; i < initialImage.height() * initialImage.width(); i++)
-    {
-        initialImage.addPixel(givenAnalyst.getImage().getPixel(i));
-    }
-
-    fireAnalyst.
-    fireAnalyst.getImage().DisplayImageInTerminal();
-
-
 
 }

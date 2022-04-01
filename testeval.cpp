@@ -16,7 +16,7 @@ int main(void)
   {
     int pixelSize = 10;
 
-    vector<string> filenames = { "img10", "img2", "img3", "img4", "img5" };
+    vector<string> filenames = { "img9", "img2", "img3", "img4", "img5" };
 
     for (auto name : filenames)
     {
