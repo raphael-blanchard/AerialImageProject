@@ -11,17 +11,50 @@
 
 Analyst::Analyst(const Image &img) : analyzedImage(img)
 {
-    pair<Color, bool> tmpPair;
-    for (int i = 0; i < analyzedImage.size(); i++)
-    {
-        tmpPair.first = analyzedImage.getPixel(i);
-        tmpPair.second = false;
-        matrixOfColorAndBool.push_back(tmpPair);
+    for (int i = 0; i < analyzedImage.height()* analyzedImage.width(); i++){
+        vectOfPointers.push_back(Head());
+        vectOfPointers[i].size = 1;
+        vectOfPointers[i].firstNode = new Node;
+        vectOfPointers[i].firstNode->indexOfPixel = i;
+        vectOfPointers[i].firstNode->representant = i;
+        vectOfPointers[i].firstNode->nextNode = nullptr;
+    }
+}
+
+void Analyst::DisplayLL(){
+    for (int i = 0; i < (int)vectOfPointers.size(); i++){
+        Node* curr = vectOfPointers[i].firstNode;
+        while (curr != nullptr){
+            cout << "{" << curr->indexOfPixel << ", " << find(i) << "}";
+            curr = curr->nextNode;
+        }
+        cout << endl;
+    }
+}
+
+int Analyst::find(int index){
+    if (vectOfPointers[index].firstNode->representant == index){
+        return index;
+    }
+    else {
+        return find(vectOfPointers[index].firstNode->representant);
+    }
+}
+
+void Analyst::testPair(int index1, int index2){
+    int parentOfIndex1 = find(index1);
+    int parentOfIndex2 = find(index2);
+    if (parentOfIndex1 == parentOfIndex2){
+        return;
+        //in the same LL
     }
 
-    //O(w*h * z), z being the number of zones in the image. 
-    //the worst case being when the image is a chess board, it's equivalent to O(w^2 * h^2) 
-    floodFill();
+    if (vectOfPointers[index1].size <= vectOfPointers[index2].size){
+        vectOfPointers[index1].firstNode->representant = parentOfIndex2;
+        vectOfPointers[index2].firstNode->nextNode = vectOfPointers[index1].firstNode;
+        vectOfPointers[index1].firstNode = vectOfPointers[index2].firstNode;
+        vectOfPointers[index2].size++;
+    }
 }
 
 Image Analyst::getImage() const
@@ -75,96 +108,9 @@ void Analyst::fillZoneDFS(Image &givenImage, int i, int j, Color previousColor, 
 // function that will take in parameters a set of integers (indexes of the coordinates transormed by the toIndex function)
 // this algorithm will realize a DFS, by callingitself four times, once for every pixel around the pixel we're looking at (pixel on top, under, on the left and on the right)
 
-// The idea is to use the matrix of Colors and Bools to check whether we already visited a pixel or not, in the case that we did visit the pixel
-// we're looking at, we get out of the function as there's nothing to be done, just like if the pixel we're looking at doesn't have the color c
-//=> which means if we get out of the function, the pixel is either not from the same zone, or it is from the same zone but we already looked at it before, so there's nothing else to do.
-void Analyst::floodFillRec(set<int> &givenSet, int i, int j, Color c)
-{
-    int widthOfMatrix = analyzedImage.width();
-    int heightOfMatrix = analyzedImage.height();
-    // if (i < 0 || i >= heightOfMatrix || j < 0 || j >= widthOfMatrix || matrixOfColorAndBool.at(i * widthOfMatrix + j).second == 1 || matrixOfColorAndBool.at(i * widthOfMatrix + j).first != c)
-    // {
-    //     // if the condition is true, it means we either can't go on or don't want to go on, so we get out of the program
-    //     return;
-    // }
-
-    // recursive calls of the function that will realize what we mean by flood fill, it'll look at the pixels around the pixel we're starting from,
-    // and then look at the pixel around these pixels etc etc... until we went through the entire image.
-    if ((i-1>=0) && (i-1 < heightOfMatrix) && (j >=0 ) && ( j < widthOfMatrix) && (matrixOfColorAndBool.at((i-1)* widthOfMatrix + j).second==0) && (matrixOfColorAndBool.at((i-1)* widthOfMatrix + j).first== c)){
-                // setting the bool of the pixel we're looking at to visited
-        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
-        // adding the index of the pixel we're looking at into the given set
-        givenSet.insert(analyzedImage.toIndex(i, j));
-        floodFillRec(givenSet, i - 1, j, c);
-    }
-    
-    if ((i+1>=0) && (i+1 < heightOfMatrix) && (j >=0 ) && ( j < widthOfMatrix) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).second==0) && (matrixOfColorAndBool.at((i+1)* widthOfMatrix + j).first==c)){
-        // setting the bool of the pixel we're looking at to visited
-        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
-        // adding the index of the pixel we're looking at into the given set
-        givenSet.insert(analyzedImage.toIndex(i, j));
-        floodFillRec(givenSet, i + 1, j, c);
-    }
-
-    if ((i>=0) && (i < heightOfMatrix) && (j-1 >=0 ) && ( j-1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j-1).first== c)){
-        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
-        // adding the index of the pixel we're looking at into the given set
-        givenSet.insert(analyzedImage.toIndex(i, j));
-        floodFillRec(givenSet, i, j - 1, c);
-    }
-
-    if ((i>=0) && (i < heightOfMatrix) && (j+1 >=0 ) && ( j+1 < widthOfMatrix) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).second==0) && (matrixOfColorAndBool.at((i)* widthOfMatrix + j+1).first== c)){
-        // setting the bool of the pixel we're looking at to visited
-        matrixOfColorAndBool.at(i * widthOfMatrix + j).second = 1;
-        // adding the index of the pixel we're looking at into the given set
-        givenSet.insert(analyzedImage.toIndex(i, j));
-        floodFillRec(givenSet, i, j + 1, c);
-    }
 
 
-    return;
-    // this function will ultimately start from a pixel, and insert into the set the index of every pixel in the same zone as the starting pixel.
-    // the goal is to run this function for every pixel of the image.
 
-    // this function has a O(w*h) complexity as it goes through the entire matrix of pixel, which is w*h long.
-}
-
-// This function is called directly in the constructor, that way directly after the initialization of an Analyst object, we get a vector of sets containing the indexes
-// of zones, for example all of the indexes in the first object of the vector, will be the indexes of pixels from the same zone
-// That way, to get the number of zones, or in general, to play around will the indexes, I can directly use the size of my vector, do a search in my vector, etc etc...
-
-// function using the recursive call floodFillRec for every pixel of the matrix of pixels
-// as said, the floodFillRec will insert into the set given in argument in the first call of the function, the indexes of the pixels from the same zone as the pixel we're starting from
-// the goal of this function is to call the floodFillRec function for every pixel of the matrix.
-void Analyst::floodFill()
-{
-    // initizaling a set that will then be passed as parameter of the floodFillRec function
-    set<int> tmpSet;
-    for (int i = 0; i < (int)analyzedImage.height(); i++)
-    {
-        for (int j = 0; j < (int)analyzedImage.width(); j++)
-        {
-            // initializing the set to an empty set for every iteration of the function
-            //tmpSet = {};
-            // calling the floodFillRec function on the pixel at position (i, j)
-            floodFillRec(tmpSet, i, j, analyzedImage.getPixel(i, j));
-            // at this point, tmpSet has been modified by the floodFillRec if it needed to be modified (aka if there was other pixels in the same zone as the pixel at position (i, j))
-            // if the size of the set is not > 0, it means nothing has been added, which means we don't need to add it to our sets of indexes.
-            if (tmpSet.size() > 1)
-            {
-                // adding the set of indexes of pixels to our vector of sets, that will later get used in other functions.
-                vectOfSets.push_back(tmpSet);
-            }
-            tmpSet.clear();
-        }
-    }
-
-    // This function run w*h times, using a function that has a complexity of O(w*h), so
-    // the complexity of this function is O(w^2*h^2) in the worst case.
-    // The worst case being whenever the image is a chess board for example, where there are w*h zones.
-    // In reality, it isn't something in O(w^2*h^2) as the floodFillRec will run k times, k being the number of zones there are in the Image.
-    // It is maybe more logical to express the time complexity of this function as O(w*h*k).
-}
 
 bool Analyst::belongToTheSameZone(int i1, int j1, int i2, int j2)
 {

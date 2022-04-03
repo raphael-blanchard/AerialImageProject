@@ -84,7 +84,7 @@ Image::Image(const Image& img){
      widthVal = img.width();
      heightVal = img.height();
 
-     for (int i = 0; i < widthVal*heightVal; i++){
+     for (int i = 1; i <= widthVal*heightVal; i++){
           pixelMatrix.push_back(img.getPixel(i));
      }
 }
@@ -139,16 +139,16 @@ Image Image::readAIP(const std::string &filename)
      Image tmpImage = Image(widthOfMatrix, heightOfMatrix);
 
      // iterator that will be used to iterate through each row of the matrix
-     int iIterator = 0;
+     int iIterator = 1;
      // while loop that will iterate through each line of the AIP file
      while (getline(MyReadFile, myText))
      {
           // myText.size() here gives us the length (number of columns) of the current line we are looking at
           // starting the loop at j=1 later as the setPixel function modifies the pixel at position i-1 and j-1
-          for (int j = 0; j < (int)myText.size(); j++)
+          for (int j = 1; j <= (int)myText.size(); j++)
           {
                // setting the pixel of the iIterator-th row and j-th column to the color read at iIterator row and j-1-th column
-               tmpImage.setPixel(iIterator, j, Color::makeColor((int)myText[j] - 48));
+               tmpImage.setPixel(iIterator, j, Color::makeColor((int)myText[j-1] - 48));
           }
           iIterator++;
      }
@@ -164,7 +164,6 @@ Color Image::getPixel(int i, int j) const
 {
      assert((1 <= i && i <= height()) && (1 <= j && j <= width()));
      // i*widthVal + j will correspond to the pixel we are looking because:
-     //  i*widthVal will take us to
      return pixelMatrix.at((i-1) * widthVal + j-1);
 }
 
@@ -180,15 +179,15 @@ Color Image::getPixel(int i) const
 //O(1)
 void Image::setPixel(int i, int j, Color col)
 {
-     assert((0 <= i && i < height()) && (0 <= j && j < width()));
-     pixelMatrix.at(i * widthVal + j) = col;
+     assert((1 <= i && i <= height()) && (1 <= j && j <= width()));
+     pixelMatrix.at((i-1) * widthVal + j-1) = col;
 }
 
 //O(1)
 void Image::setPixel(int i, Color col)
 {
-     assert(0 <= i && i < height()*width());
-     pixelMatrix.at(i) = col;
+     assert(1 <= i && i <= height()*width());
+     pixelMatrix.at(i-1) = col;
 }
 
 //O(w*h)
@@ -373,7 +372,7 @@ void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
 
 Image makeRandomImage(int w, int h){
      Image tmpImage = Image(w, h);
-     for (int i = 0; i < w*h; i++){
+     for (int i = 1; i <= w*h; i++){
           int randomInt = rand() % Color::nbColors();
           Color randomColor = Color::makeColor(randomInt);
           tmpImage.setPixel(i, randomColor);

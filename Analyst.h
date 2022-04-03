@@ -13,6 +13,17 @@
 
 #include <unordered_map>
 
+struct Node {
+  int indexOfPixel;
+  int representant;
+  Node* nextNode;
+};
+
+struct Head {
+  Node* firstNode;
+  int size;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 /// This is an analyst of images.
 ///
@@ -69,6 +80,12 @@ public:
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
   std::set<int> zoneOfPixel(int i, int j);
 
+  void DisplayLL();
+
+  int find(int index);
+
+  void testPair(int index1, int index2);
+
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
   Image analyzedImage;
@@ -76,6 +93,8 @@ private:
   //used to store in the sets of colors of the same zone
   //it'll be modified directly in the constructor, that way I can do some simple operations on the set later on for other functions
   vector< set<int> > vectOfSets;
+  vector<Head> vectOfPointers; //vector of linked lists
+  vector<int> vectOfNbOfPixelsPerColor;
 };
 
 #endif

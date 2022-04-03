@@ -60,29 +60,33 @@ int main(void)
 
   Image onethousand = Image(1000,1000);
   onethousand.writeAIP("img10");
-  Analyst firstAnalyst = Analyst(makeRandomImage(200,200));
-  //firstAnalyst.getImage().DisplayImageInTerminal();
-  cout << endl;
+  Analyst firstAnalyst = Analyst(makeRandomImage(20,20));
+  // //firstAnalyst.getImage().DisplayImageInTerminal();
+  // cout << endl;
+  firstAnalyst.DisplayLL();
+  firstAnalyst.testPair(397,398);
+  firstAnalyst.testPair(399,398);
+  firstAnalyst.DisplayLL();
 
-  // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
-  cout << "in the same zone? " << firstAnalyst.belongToTheSameZone(0, 0, 0, 23) << endl;
-  cout << "number of zones of color " << Color::Black << " " << firstAnalyst.nbZonesOfColor(Color::Black) << endl;
+  // // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
+  // cout << "in the same zone? " << firstAnalyst.belongToTheSameZone(0, 0, 0, 23) << endl;
+  // cout << "number of zones of color " << Color::Black << " " << firstAnalyst.nbZonesOfColor(Color::Black) << endl;
 
-  cout << endl;
-  set<int> tmpSet = firstAnalyst.zoneOfPixel(1, 1);
-  for (int item : tmpSet)
-  {
-    cout << item << " ";
-  }
+  // cout << endl;
+  // set<int> tmpSet = firstAnalyst.zoneOfPixel(1, 1);
+  // for (int item : tmpSet)
+  // {
+  //   cout << item << " ";
+  // }
 
-  Image randomImage = makeRandomImage(10,10);
-  Image blackTest = Image(10,10);
-  randomImage.writeSVG("randomImage", 20);
-  randomImage.DisplayImageInTerminal();
-  FireSimulator tmpSimulator = FireSimulator(randomImage);
+  // Image randomImage = makeRandomImage(10,10);
+  // Image blackTest = Image(10,10);
+  // randomImage.writeSVG("randomImage", 20);
+  // randomImage.DisplayImageInTerminal();
+  // FireSimulator tmpSimulator = FireSimulator(randomImage);
 
 
-  cout << endl;
+  // cout << endl;
 
   return 0;
 }
