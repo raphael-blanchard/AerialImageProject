@@ -13,19 +13,20 @@ Analyst::Analyst(const Image &img) : analyzedImage(img)
 {
     for (int i = 0; i < analyzedImage.height()* analyzedImage.width(); i++){
         vectOfPointers.push_back(Head());
-        vectOfPointers[i].size = 1;
-        vectOfPointers[i].firstNode = new Node;
-        vectOfPointers[i].firstNode->indexOfPixel = i;
-        vectOfPointers[i].firstNode->representant = i;
-        vectOfPointers[i].firstNode->nextNode = nullptr;
+        vectOfPointers[i].size = new int(1);
+        vectOfPointers[i].firstNode = new Node({i, i, nullptr});
+        // vectOfPointers[i].firstNode->indexOfPixel = i;
+        // vectOfPointers[i].firstNode->representant = i;
+        // vectOfPointers[i].firstNode->nextNode = nullptr;
     }
 }
 
 void Analyst::DisplayLL(){
     for (int i = 0; i < (int)vectOfPointers.size(); i++){
+        cout << "size of this list is: " << *(vectOfPointers[i].size) << " - ";
         Node* curr = vectOfPointers[i].firstNode;
         while (curr != nullptr){
-            cout << "{" << curr->indexOfPixel << ", " << find(i) << "}";
+            cout << "{index: " << curr->indexOfPixel << ",rep: " << find(i) << "}";
             curr = curr->nextNode;
         }
         cout << endl;
@@ -49,11 +50,28 @@ void Analyst::testPair(int index1, int index2){
         //in the same LL
     }
 
-    if (vectOfPointers[index1].size <= vectOfPointers[index2].size){
+    //putting the LL of index1 after the LL at index2
+    if (*(vectOfPointers[index1].size) <= *(vectOfPointers[index2].size)){
+        Node* curr = vectOfPointers[index2].firstNode;
+        while (curr->nextNode != nullptr){
+            curr = curr->nextNode;
+        }
         vectOfPointers[index1].firstNode->representant = parentOfIndex2;
-        vectOfPointers[index2].firstNode->nextNode = vectOfPointers[index1].firstNode;
+        curr->nextNode = vectOfPointers[index1].firstNode;
         vectOfPointers[index1].firstNode = vectOfPointers[index2].firstNode;
-        vectOfPointers[index2].size++;
+        vectOfPointers[index1].size = vectOfPointers[index2].size;
+        *(vectOfPointers[index2].size)+=1;
+    }
+    else{
+        Node* curr = vectOfPointers[index1].firstNode;
+        while (curr->nextNode != nullptr){
+            curr = curr->nextNode;
+        }
+        vectOfPointers[index2].firstNode->representant = parentOfIndex1;
+        curr->nextNode = vectOfPointers[index2].firstNode;
+        vectOfPointers[index2].firstNode = vectOfPointers[index1].firstNode;
+        vectOfPointers[index2].size = vectOfPointers[index1].size;
+        *(vectOfPointers[index1].size)+=1;
     }
 }
 
