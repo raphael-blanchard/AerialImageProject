@@ -14,64 +14,78 @@ Analyst::Analyst(const Image &img) : analyzedImage(img)
     for (int i = 0; i < analyzedImage.height()* analyzedImage.width(); i++){
         vectOfPointers.push_back(Head());
         vectOfPointers[i].size = new int(1);
-        vectOfPointers[i].firstNode = new Node({i, i, nullptr});
-        // vectOfPointers[i].firstNode->indexOfPixel = i;
-        // vectOfPointers[i].firstNode->representant = i;
-        // vectOfPointers[i].firstNode->nextNode = nullptr;
+        vectOfPointers[i].listOfNodes = new list<Node>();
+        vectOfPointers[i].listOfNodes->push_back(Node({i, i}));
     }
 }
 
 void Analyst::DisplayLL(){
+
+    // list<Node> tmpList;
+    // for (int i = 0; i < 3; i++){
+    //     tmpList.push_back(Node({i*10, i*10}));
+    // }
+
     for (int i = 0; i < (int)vectOfPointers.size(); i++){
+        // auto it = vectOfPointers[i].listOfNodes.begin();
+        // vectOfPointers[i].listOfNodes.splice(it, tmpList);
         cout << "size of this list is: " << *(vectOfPointers[i].size) << " - ";
-        Node* curr = vectOfPointers[i].firstNode;
-        while (curr != nullptr){
-            cout << "{index: " << curr->indexOfPixel << ",rep: " << find(i) << "}";
-            curr = curr->nextNode;
+        for (auto it=vectOfPointers[i].listOfNodes->begin(); it!=vectOfPointers[i].listOfNodes->end(); ++it){
+            cout << "{index: " << it->indexOfPixel << ",rep: " << find(i) << "}";
         }
         cout << endl;
     }
 }
 
 int Analyst::find(int index){
-    if (vectOfPointers[index].firstNode->representant == index){
+    if (vectOfPointers[index].listOfNodes->front().representant == index){
         return index;
     }
     else {
-        return find(vectOfPointers[index].firstNode->representant);
+        return find(vectOfPointers[index].listOfNodes->front().representant);
     }
 }
 
-void Analyst::testPair(int index1, int index2){
+void Analyst::merge(int index1, int index2){
     int parentOfIndex1 = find(index1);
     int parentOfIndex2 = find(index2);
     if (parentOfIndex1 == parentOfIndex2){
         return;
-        //in the same LL
+        //in the same LL so we don't need to concatenate them
     }
 
     //putting the LL of index1 after the LL at index2
     if (*(vectOfPointers[index1].size) <= *(vectOfPointers[index2].size)){
-        Node* curr = vectOfPointers[index2].firstNode;
-        while (curr->nextNode != nullptr){
-            curr = curr->nextNode;
+        vector<int> tmpVectOfIndexes;
+        for (auto it=vectOfPointers[index1].listOfNodes->begin(); it!=vectOfPointers[index1].listOfNodes->end(); ++it){
+            tmpVectOfIndexes.push_back(it->indexOfPixel);
         }
-        vectOfPointers[index1].firstNode->representant = parentOfIndex2;
-        curr->nextNode = vectOfPointers[index1].firstNode;
-        vectOfPointers[index1].firstNode = vectOfPointers[index2].firstNode;
-        vectOfPointers[index1].size = vectOfPointers[index2].size;
-        *(vectOfPointers[index2].size)+=1;
+        auto it = vectOfPointers[index2].listOfNodes->end();
+        vectOfPointers[index2].listOfNodes->splice(it, *(vectOfPointers[index1].listOfNodes));
+        *(vectOfPointers[index2].size) += *(vectOfPointers[index1].size);
+        
+        for (int index : tmpVectOfIndexes){
+            vectOfPointers[index].listOfNodes->front().representant = parentOfIndex2;
+            vectOfPointers[index].listOfNodes = vectOfPointers[index2].listOfNodes;
+            vectOfPointers[index].size = vectOfPointers[index2].size;
+        }
     }
     else{
-        Node* curr = vectOfPointers[index1].firstNode;
-        while (curr->nextNode != nullptr){
-            curr = curr->nextNode;
+        vector<int> tmpVectOfIndexes;
+        for (auto it=vectOfPointers[index2].listOfNodes->begin(); it!=vectOfPointers[index2].listOfNodes->end(); ++it){
+            tmpVectOfIndexes.push_back(it->indexOfPixel);
         }
-        vectOfPointers[index2].firstNode->representant = parentOfIndex1;
-        curr->nextNode = vectOfPointers[index2].firstNode;
-        vectOfPointers[index2].firstNode = vectOfPointers[index1].firstNode;
+        auto it = vectOfPointers[index1].listOfNodes->end();
+        vectOfPointers[index1].listOfNodes->splice(it, *(vectOfPointers[index2].listOfNodes));
+        *(vectOfPointers[index1].size) += *(vectOfPointers[index2].size);
+        vectOfPointers[index2].listOfNodes->front().representant = parentOfIndex1;
+        vectOfPointers[index2].listOfNodes = vectOfPointers[index1].listOfNodes;
         vectOfPointers[index2].size = vectOfPointers[index1].size;
-        *(vectOfPointers[index1].size)+=1;
+        for (int index : tmpVectOfIndexes){
+            vectOfPointers[index].listOfNodes->front().representant = parentOfIndex1;
+            vectOfPointers[index].listOfNodes = vectOfPointers[index1].listOfNodes;
+            vectOfPointers[index].size = vectOfPointers[index1].size;
+        }
     }
 }
 

@@ -10,17 +10,17 @@
 #define ANALYST_H
 #include "Image.h"
 #include <set>
+#include <list>
 
 #include <unordered_map>
 
 struct Node {
   int indexOfPixel;
   int representant;
-  Node* nextNode;
 };
 
 struct Head {
-  Node* firstNode;
+  list<Node>* listOfNodes;
   int* size;
 };
 
@@ -84,7 +84,7 @@ public:
 
   int find(int index);
 
-  void testPair(int index1, int index2);
+  void merge(int index1, int index2);
 
 private:
   //creating a HashMap using Colors as keys and sets of integers as values

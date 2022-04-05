@@ -61,15 +61,15 @@ int main(void)
   Image onethousand = Image(1000,1000);
   onethousand.writeAIP("img10");
   Analyst firstAnalyst = Analyst(makeRandomImage(3,3));
-  // //firstAnalyst.getImage().DisplayImageInTerminal();
-  // cout << endl;
+  //firstAnalyst.getImage().DisplayImageInTerminal();
+  cout << endl;
   firstAnalyst.DisplayLL();
   cout << endl;
   cout << "parent of 1 is " << firstAnalyst.find(1) << endl;
-  firstAnalyst.testPair(1,2);
+  firstAnalyst.merge(1,2);
   cout << "parent of 1 is " << firstAnalyst.find(1) << endl;
-  firstAnalyst.testPair(2,3);
-  firstAnalyst.testPair(7,2);
+  firstAnalyst.merge(6,5);
+  firstAnalyst.merge(5,2);
   firstAnalyst.DisplayLL();
 
   // // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
