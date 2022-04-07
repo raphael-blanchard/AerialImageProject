@@ -73,8 +73,7 @@ public:
   //making the function static to be able to use it in the fillZone function
   void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
 
-  void floodFill();
-  void floodFillRec(set<int> &givenSet, int i, int j, Color c);
+  void mergeAll();
 
 
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
@@ -95,6 +94,8 @@ private:
   vector< set<int> > vectOfSets;
   vector<Head> vectOfPointers; //vector of linked lists
   vector<int> vectOfNbOfPixelsPerColor;
+  int zoneCount;
 };
 
 #endif
+ 

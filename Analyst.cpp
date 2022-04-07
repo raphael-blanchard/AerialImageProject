@@ -11,12 +11,15 @@
 
 Analyst::Analyst(const Image &img) : analyzedImage(img)
 {
+    zoneCount = analyzedImage.height()* analyzedImage.width();
     for (int i = 0; i < analyzedImage.height()* analyzedImage.width(); i++){
         vectOfPointers.push_back(Head());
         vectOfPointers[i].size = new int(1);
         vectOfPointers[i].listOfNodes = new list<Node>();
         vectOfPointers[i].listOfNodes->push_back(Node({i, i}));
     }
+    mergeAll();
+    cout << "number of zones: " <<zoneCount << endl;
 }
 
 void Analyst::DisplayLL(){
@@ -47,6 +50,8 @@ int Analyst::find(int index){
 }
 
 void Analyst::merge(int index1, int index2){
+
+    assert (index1<analyzedImage.width()*analyzedImage.height() && index1>=0 && index2<analyzedImage.width()*analyzedImage.height() && index2>=0);
     int parentOfIndex1 = find(index1);
     int parentOfIndex2 = find(index2);
     if (parentOfIndex1 == parentOfIndex2){
@@ -85,6 +90,22 @@ void Analyst::merge(int index1, int index2){
             vectOfPointers[index].listOfNodes->front().representant = parentOfIndex1;
             vectOfPointers[index].listOfNodes = vectOfPointers[index1].listOfNodes;
             vectOfPointers[index].size = vectOfPointers[index1].size;
+        }
+    }
+}
+
+void Analyst::mergeAll(){
+    int size = analyzedImage.width()*analyzedImage.height();
+    for (int i = 1; i <= size; i++){
+        if (i+1 <= size && ((i)%analyzedImage.width() > (i-1)%analyzedImage.width()) && analyzedImage.getPixel(i+1) == analyzedImage.getPixel(i) && find(i-1) != find(i)){
+            merge(i-1, i);
+            cout << "first if: " << i << " and " << i+1 <<endl;
+            zoneCount--;
+        }
+        if (i+analyzedImage.width()<=size && analyzedImage.getPixel(i+analyzedImage.width()) == analyzedImage.getPixel(i) && find(i+analyzedImage.width()) != find(i)){
+            merge(i-1, i+analyzedImage.width()-1);
+            cout << "second if: " << i << " and " << i+analyzedImage.width() <<endl;
+            zoneCount--;
         }
     }
 }
