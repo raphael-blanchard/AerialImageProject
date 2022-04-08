@@ -11,73 +11,105 @@
 
 Analyst::Analyst(const Image &img) : analyzedImage(img)
 {
-    zoneCount = analyzedImage.height()* analyzedImage.width();
-    for (int i = 0; i < analyzedImage.height()* analyzedImage.width(); i++){
+    zoneCount = analyzedImage.height() * analyzedImage.width();
+    for (int i = 0; i < analyzedImage.height() * analyzedImage.width(); i++)
+    {
         vectOfPointers.push_back(Head());
         vectOfPointers[i].size = new int(1);
         vectOfPointers[i].listOfNodes = new list<Node>();
         vectOfPointers[i].listOfNodes->push_back(Node({i, i}));
     }
+    for (int i = 0; i < Color::nbColors(); i++)
+    {
+        vectOfNbOfZonesPerColor.push_back(0);
+        vectOfNbOfPixelsPerColor.push_back(0);
+    }
+
+    for (int i = 1; i <= analyzedImage.size(); i++){
+        //integer value of the pixel at coordinate i
+        int indexOfColor = analyzedImage.getPixel(i).toInt();
+        //as vectOfNbOfZonesPerColor.at(i) counts the numbers of zones of the color i (Color::makeColor(i))
+        //this loop will set the number of the zone of color i equal to the number of pixels of color i in the image
+        //(which we will decrease later on when merging zones)
+        vectOfNbOfZonesPerColor.at(indexOfColor)++;
+
+        //as vectOfNbOfPixelsPerColor.at(i) counts the number of pixels in the zone of color i
+        //we can increment the value at the index indexOfColor
+        vectOfNbOfPixelsPerColor.at(indexOfColor)++;
+    }
+
     mergeAll();
-    cout << "number of zones: " <<zoneCount << endl;
+    cout << "number of zones: " << zoneCount << endl;
 }
 
-void Analyst::DisplayLL(){
+void Analyst::DisplayLL()
+{
 
     // list<Node> tmpList;
     // for (int i = 0; i < 3; i++){
     //     tmpList.push_back(Node({i*10, i*10}));
     // }
 
-    for (int i = 0; i < (int)vectOfPointers.size(); i++){
+    for (int i = 0; i < (int)vectOfPointers.size(); i++)
+    {
         // auto it = vectOfPointers[i].listOfNodes.begin();
         // vectOfPointers[i].listOfNodes.splice(it, tmpList);
         cout << "size of this list is: " << *(vectOfPointers[i].size) << " - ";
-        for (auto it=vectOfPointers[i].listOfNodes->begin(); it!=vectOfPointers[i].listOfNodes->end(); ++it){
+        for (auto it = vectOfPointers[i].listOfNodes->begin(); it != vectOfPointers[i].listOfNodes->end(); ++it)
+        {
             cout << "{index: " << it->indexOfPixel << ",rep: " << find(i) << "}";
         }
         cout << endl;
     }
 }
 
-int Analyst::find(int index){
-    if (vectOfPointers[index].listOfNodes->front().representant == index){
+int Analyst::find(int index)
+{
+    if (vectOfPointers[index].listOfNodes->front().representant == index)
+    {
         return index;
     }
-    else {
+    else
+    {
         return find(vectOfPointers[index].listOfNodes->front().representant);
     }
 }
 
-void Analyst::merge(int index1, int index2){
-
-    assert (index1<analyzedImage.width()*analyzedImage.height() && index1>=0 && index2<analyzedImage.width()*analyzedImage.height() && index2>=0);
+void Analyst::merge(int index1, int index2)
+{
+    assert(index1 < analyzedImage.size() && index1 >= 0 && index2 < analyzedImage.size() && index2 >= 0);
     int parentOfIndex1 = find(index1);
     int parentOfIndex2 = find(index2);
-    if (parentOfIndex1 == parentOfIndex2){
+    if (parentOfIndex1 == parentOfIndex2)
+    {
         return;
         //in the same LL so we don't need to concatenate them
     }
 
     //putting the LL of index1 after the LL at index2
-    if (*(vectOfPointers[index1].size) <= *(vectOfPointers[index2].size)){
+    if (*(vectOfPointers[index1].size) <= *(vectOfPointers[index2].size))
+    {
         vector<int> tmpVectOfIndexes;
-        for (auto it=vectOfPointers[index1].listOfNodes->begin(); it!=vectOfPointers[index1].listOfNodes->end(); ++it){
+        for (auto it = vectOfPointers[index1].listOfNodes->begin(); it != vectOfPointers[index1].listOfNodes->end(); ++it)
+        {
             tmpVectOfIndexes.push_back(it->indexOfPixel);
         }
         auto it = vectOfPointers[index2].listOfNodes->end();
         vectOfPointers[index2].listOfNodes->splice(it, *(vectOfPointers[index1].listOfNodes));
         *(vectOfPointers[index2].size) += *(vectOfPointers[index1].size);
-        
-        for (int index : tmpVectOfIndexes){
+
+        for (int index : tmpVectOfIndexes)
+        {
             vectOfPointers[index].listOfNodes->front().representant = parentOfIndex2;
             vectOfPointers[index].listOfNodes = vectOfPointers[index2].listOfNodes;
             vectOfPointers[index].size = vectOfPointers[index2].size;
         }
     }
-    else{
+    else
+    {
         vector<int> tmpVectOfIndexes;
-        for (auto it=vectOfPointers[index2].listOfNodes->begin(); it!=vectOfPointers[index2].listOfNodes->end(); ++it){
+        for (auto it = vectOfPointers[index2].listOfNodes->begin(); it != vectOfPointers[index2].listOfNodes->end(); ++it)
+        {
             tmpVectOfIndexes.push_back(it->indexOfPixel);
         }
         auto it = vectOfPointers[index1].listOfNodes->end();
@@ -86,7 +118,8 @@ void Analyst::merge(int index1, int index2){
         vectOfPointers[index2].listOfNodes->front().representant = parentOfIndex1;
         vectOfPointers[index2].listOfNodes = vectOfPointers[index1].listOfNodes;
         vectOfPointers[index2].size = vectOfPointers[index1].size;
-        for (int index : tmpVectOfIndexes){
+        for (int index : tmpVectOfIndexes)
+        {
             vectOfPointers[index].listOfNodes->front().representant = parentOfIndex1;
             vectOfPointers[index].listOfNodes = vectOfPointers[index1].listOfNodes;
             vectOfPointers[index].size = vectOfPointers[index1].size;
@@ -94,17 +127,29 @@ void Analyst::merge(int index1, int index2){
     }
 }
 
-void Analyst::mergeAll(){
-    int size = analyzedImage.width()*analyzedImage.height();
-    for (int i = 1; i <= size; i++){
-        if (i+1 <= size && ((i)%analyzedImage.width() > (i-1)%analyzedImage.width()) && analyzedImage.getPixel(i+1) == analyzedImage.getPixel(i) && find(i-1) != find(i)){
-            merge(i-1, i);
-            cout << "first if: " << i << " and " << i+1 <<endl;
+void Analyst::mergeAll()
+{
+    for (int i = 1; i <= analyzedImage.size(); i++)
+    {
+        if (i + 1 <= analyzedImage.size() && ((i) % analyzedImage.width() > (i - 1) % analyzedImage.width()) && analyzedImage.getPixel(i + 1) == analyzedImage.getPixel(i) && find(i - 1) != find(i))
+        {
+            merge(i - 1, i);
+            int valueOfColor = analyzedImage.getPixel(i).toInt();
+            //as vectOfNbOfZonesPerColor.at(i) counts the numbers of zones of the color i (Color::makeColor(i))
+            //decrementing the value at the index valueOfColor is logical as merging two zones of the same colors, decreases the number of
+            //zones of this specific color
+            vectOfNbOfZonesPerColor.at(valueOfColor)--;
+            //cout << "first if: " << i << " and " << i + 1 << endl;
+            //we decrement the zoneCount as merging 2 zones means they are part of the same zone, which means their zone only has to count for 1 and not 2
             zoneCount--;
         }
-        if (i+analyzedImage.width()<=size && analyzedImage.getPixel(i+analyzedImage.width()) == analyzedImage.getPixel(i) && find(i+analyzedImage.width()) != find(i)){
-            merge(i-1, i+analyzedImage.width()-1);
-            cout << "second if: " << i << " and " << i+analyzedImage.width() <<endl;
+        if (i + analyzedImage.width() <= analyzedImage.size() && analyzedImage.getPixel(i + analyzedImage.width()) == analyzedImage.getPixel(i) && find(i + analyzedImage.width() - 1) != find(i))
+        {
+            merge(i - 1, i + analyzedImage.width() - 1);
+            int valueOfColor = analyzedImage.getPixel(i).toInt();
+            //same idea as previous if condition
+            vectOfNbOfZonesPerColor.at(valueOfColor)--;
+            //cout << "second if: " << i << " and " << i + analyzedImage.width() << endl;
             zoneCount--;
         }
     }
@@ -161,75 +206,37 @@ void Analyst::fillZoneDFS(Image &givenImage, int i, int j, Color previousColor, 
 // function that will take in parameters a set of integers (indexes of the coordinates transormed by the toIndex function)
 // this algorithm will realize a DFS, by callingitself four times, once for every pixel around the pixel we're looking at (pixel on top, under, on the left and on the right)
 
-
-
-
-
 bool Analyst::belongToTheSameZone(int i1, int j1, int i2, int j2)
 {
-    int uniqueIndexOfFirstPixel = analyzedImage.toIndex(i1, j1);
-    int uniqueIndexOfSecondPixel = analyzedImage.toIndex(i2, j2);
-    // iterating through each set of the vector
-    // O(k) operation, k being the number of zones, which is w*h zones in the worst case
-    for (set<int> setOfIndexes : vectOfSets)
-    {
-        // returns true if there is the uniqueindexOfFirstPixel in the set we're looking at
-        // O(log n) operation
-        if (setOfIndexes.count(uniqueIndexOfFirstPixel))
-        {
-            // If we are at this point, we know the pixel at (i1, j1) is in the zone represented by the set we're currently looking at
-            // which means that if the pixel (i1,j1) and (i2,j2) belong to the same zone, the unique index of the pixel at (i2,j2) is in the set we're looking at
-
-            // returning the value obtaining when searching if the uniqueIndexOfSecondPixel is in this set
-            return setOfIndexes.count(uniqueIndexOfSecondPixel);
-        }
-    }
-    return false;
+    int widthOfImage = analyzedImage.width();
+    //i1*widthOfImage + j1 will be the index of the pixel at coordinates (i1,j1) in a one dimension array
+    //if the parent of these pixels aren't the same, then they are not in the same zone
+    return find(i1 * widthOfImage + j1) == find(i2 * widthOfImage + j2);
 }
-// O(log2(z)) ?? or do we count the one in the constructor
 
 int Analyst::nbPixelsOfColor(Color c) const
 {
-    int totalNb = 0;
-    for (int i = 0; i < analyzedImage.size(); i++)
-    {
-        if (analyzedImage.getPixel(i) == c)
-        {
-            totalNb++;
-        }
-    }
-    return totalNb;
-
-    // maybe check something in hashmap storing vectors of sets, and check size, do this with testeval
+    return vectOfNbOfPixelsPerColor.at(c.toInt());
 }
 
 int Analyst::nbZonesOfColor(Color c) const
 {
-    int totalNbOfZones = 0;
-    for (set<int> setOfPixel : vectOfSets)
-    {
-        int indexOfFirstPixelInZone = *(setOfPixel.begin());
-        pair<int, int> coordinatesOfFirstPixelInZone = analyzedImage.toCoordinate(indexOfFirstPixelInZone);
-
-        if (analyzedImage.getPixel(coordinatesOfFirstPixelInZone.first, coordinatesOfFirstPixelInZone.second) == c)
-        {
-            totalNbOfZones++;
-        }
-    }
-    return totalNbOfZones;
+    //as we have initialized (in the constructor) and decremented these values each time we were merging zones
+    //we can return this value in constant time
+    //O(1) function
+    return vectOfNbOfZonesPerColor.at(c.toInt());
 }
-
 
 int Analyst::nbZones() const
 {
     // simply returning the size of the vect containing the sets, since every set is one zone
-    return vectOfSets.size();
+    return zoneCount;
     //O(1) operation
 }
 
 set<int> Analyst::zoneOfPixel(int i, int j)
 {
-    
+
     int widthOfMatrix = analyzedImage.width();
     int heightOfMatrix = analyzedImage.height();
     assert(i > 0 && i <= heightOfMatrix && j > 0 && j <= widthOfMatrix);
@@ -237,7 +244,7 @@ set<int> Analyst::zoneOfPixel(int i, int j)
     int uniqueIndexOfPixel = analyzedImage.toIndex(i, j);
     for (set<int> setOfPixel : vectOfSets)
     {
-        
+
         // O(log z) operation
         // if the unique index is in the set, we return the set
         if (setOfPixel.count(uniqueIndexOfPixel))

@@ -58,9 +58,20 @@ int main(void)
 
   Image fourthImage(firstImage);
 
-  Image onethousand = Image(1000,1000);
+  Image onethousand = makeRandomImage(2000,2000);
   onethousand.writeAIP("img10");
-  Analyst firstAnalyst = Analyst(makeRandomImage(3,3));
+  Image test = Image(3,3);
+  test.setPixel(1, Color::makeColor(1));
+  test.setPixel(2, Color::makeColor(3));
+  test.setPixel(3, Color::makeColor(3));
+  test.setPixel(4, Color::makeColor(1));
+  test.setPixel(5, Color::makeColor(2));
+  test.setPixel(6, Color::makeColor(2));
+  test.setPixel(7, Color::makeColor(2));
+  test.setPixel(8, Color::makeColor(3));
+  test.setPixel(9, Color::makeColor(2));
+  Analyst firstAnalyst = Analyst(test);
+
   firstAnalyst.getImage().DisplayImageInTerminal();
   //firstAnalyst.getImage().DisplayImageInTerminal();
   cout << endl;
@@ -72,6 +83,9 @@ int main(void)
   // firstAnalyst.merge(6,5);
   // firstAnalyst.merge(5,2);
   firstAnalyst.DisplayLL();
+
+  cout << endl; 
+  cout << firstAnalyst.belongToTheSameZone(1, 2, 2, 2) << endl;
 
   // // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
   // cout << "in the same zone? " << firstAnalyst.belongToTheSameZone(0, 0, 0, 23) << endl;

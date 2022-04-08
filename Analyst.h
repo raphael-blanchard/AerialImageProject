@@ -94,6 +94,7 @@ private:
   vector< set<int> > vectOfSets;
   vector<Head> vectOfPointers; //vector of linked lists
   vector<int> vectOfNbOfPixelsPerColor;
+  vector<int> vectOfNbOfZonesPerColor;
   int zoneCount;
 };
 
