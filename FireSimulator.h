@@ -37,14 +37,18 @@ Image getImageOfStepN(int n);
 
 private:
 //will be used to store the index of all of the pixels that are part of forest zones (aka zones of green pixels)
-vector<int> vectorOfForestPixels;
+set<int> setOfForestPixels;
 
 //queue that will store vectors of pixels that have been burnt by time
 queue<vector<int>> queueOfBurntPixels;
-//used to move in time
-Image modifiedImage;
+
 //used to get the forest zones and to keep track of the zones while it burns
 Analyst fireAnalyst;
+
+//storing the step we are currently at
+int stepCounter;
+int startingPoint;
+Image modifiedImage;
 };
 
 #endif

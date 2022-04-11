@@ -44,7 +44,7 @@ int main(void)
   string fileName = "amazonie1";
   secondImage.writeAIP(fileName);
   Image thirdImage = Image::readAIP(fileName);
-  thirdImage.writeSVG(fileName + "svg", 20);
+  thirdImage.writeSVG(fileName, 20);
 
   // bool testingbool = (secondImage==firstImage);
   cout << "are these pixels consecutive pixels? " << secondImage.areConsecutivePixels(1, 49, 1, 50) << endl;
@@ -62,13 +62,13 @@ int main(void)
   onethousand.writeAIP("img10");
   Image test = Image(3,3);
   test.setPixel(1, Color::makeColor(1));
-  test.setPixel(2, Color::makeColor(3));
-  test.setPixel(3, Color::makeColor(3));
+  test.setPixel(2, Color::makeColor(4));
+  test.setPixel(3, Color::makeColor(4));
   test.setPixel(4, Color::makeColor(1));
   test.setPixel(5, Color::makeColor(2));
   test.setPixel(6, Color::makeColor(2));
   test.setPixel(7, Color::makeColor(2));
-  test.setPixel(8, Color::makeColor(3));
+  test.setPixel(8, Color::makeColor(4));
   test.setPixel(9, Color::makeColor(2));
   Analyst firstAnalyst = Analyst(test);
 
@@ -86,6 +86,14 @@ int main(void)
 
   cout << endl; 
   cout << firstAnalyst.belongToTheSameZone(1, 2, 2, 2) << endl;
+  set<int> tmpset = firstAnalyst.zoneOfPixel(1,1);
+  int i = 1;
+  pair<int, int> coordinates = test.toCoordinate(i);
+  cout << "i is " << coordinates.first << " and j is " << coordinates.second << endl;
+
+  FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"));
+  Image testingSimulator = firstSimulator.getImageOfStepN(1);
+  testingSimulator.writeSVG("firstSimulator", 20);
 
   // // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
   // cout << "in the same zone? " << firstAnalyst.belongToTheSameZone(0, 0, 0, 23) << endl;

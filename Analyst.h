@@ -73,17 +73,19 @@ public:
   //making the function static to be able to use it in the fillZone function
   void fillZoneDFS(Image &tmpImage, int i, int j,Color previousColor, Color c);
 
-  void mergeAll();
-
-
   /// Returns the indexes of the pixels that belong to the zone of (i, j)
+  //ask if pixel at ith row and jth column
   std::set<int> zoneOfPixel(int i, int j);
 
   void DisplayLL();
 
   int find(int index);
 
+  //function that merges two zones
   void merge(int index1, int index2);
+  
+  //function called in the constructor of the analyst, calling the merge function on 
+  void mergeAll();
 
 private:
   //creating a HashMap using Colors as keys and sets of integers as values

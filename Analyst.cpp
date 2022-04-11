@@ -236,21 +236,11 @@ int Analyst::nbZones() const
 
 set<int> Analyst::zoneOfPixel(int i, int j)
 {
-
-    int widthOfMatrix = analyzedImage.width();
-    int heightOfMatrix = analyzedImage.height();
-    assert(i > 0 && i <= heightOfMatrix && j > 0 && j <= widthOfMatrix);
-    // getting the unique index of the pixel at position (i, j)
-    int uniqueIndexOfPixel = analyzedImage.toIndex(i, j);
-    for (set<int> setOfPixel : vectOfSets)
-    {
-
-        // O(log z) operation
-        // if the unique index is in the set, we return the set
-        if (setOfPixel.count(uniqueIndexOfPixel))
-        {
-            return setOfPixel;
-        }
+    assert(i >= 0 && i <analyzedImage.height() && j >= 0 && j < analyzedImage.width());
+    set<int> tmpSet;
+    int indexOfPixel = analyzedImage.toIndex(i,j);
+    for (auto it = vectOfPointers[indexOfPixel].listOfNodes->begin(); it != vectOfPointers[indexOfPixel].listOfNodes->end(); ++it){
+        tmpSet.insert(it->indexOfPixel);
     }
-    return set<int>();
+    return tmpSet;
 }
