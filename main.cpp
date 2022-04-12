@@ -92,8 +92,15 @@ int main(void)
   cout << "i is " << coordinates.first << " and j is " << coordinates.second << endl;
 
   FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"));
-  Image testingSimulator = firstSimulator.getImageOfStepN(1);
-  testingSimulator.writeSVG("firstSimulator", 20);
+  cout << "Start of the simulation, press 1 and enter to continue, 0 to stop" << endl;
+  int loop;
+  cin >> loop;
+  while (loop==1){
+    Image testingSimulator = firstSimulator.getImageOfStepN(1);
+    testingSimulator.writeSVG("firstSimulator", 20);
+    cin >> loop;
+  }
+  
 
   // // firstAnalyst.fillZone(1,1, Color::Red).DisplayImageInTerminal();
   // cout << "in the same zone? " << firstAnalyst.belongToTheSameZone(0, 0, 0, 23) << endl;

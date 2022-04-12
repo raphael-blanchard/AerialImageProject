@@ -39,7 +39,6 @@ FireSimulator::FireSimulator(const Image &givenImage) : fireAnalyst(givenImage),
 void FireSimulator::nextStep(){
     if (startingPoint >= 0){
         if (stepCounter == 0){
-            cout << "in there" << endl;
             modifiedImage.setPixel(startingPoint+1, Color::Red);
             stepCounter++;
         }
@@ -57,9 +56,15 @@ void FireSimulator::advanceByNSteps(int n){
 }
 
 Image FireSimulator::getImageOfStepN(int n){
-    // while (stepCounter < n){
-
-    // }
-    nextStep();
+    while (stepCounter < n){
+        nextStep();
+    }
     return modifiedImage;
 }
+
+// make porportion threshold with the number of burning pixels (that we put in a vector
+// then, take a random number between 1 and sizeOfFOrest*proportion
+// then 
+
+
+// burn them and add to a global array
