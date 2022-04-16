@@ -13,6 +13,7 @@
 #include "Image.h"
 #include "Analyst.h"
 #include <queue>
+#include <unordered_map>
 
 ////////////////////////////////////////////////////////////////////////////////
 /// This is a fire simulator.
@@ -20,35 +21,38 @@
 /// Given a pixel of forest in an image, it simulates a fire in the zone
 /// of forest of the given pixel.
 ////////////////////////////////////////////////////////////////////////////////
-class FireSimulator {
+class FireSimulator
+{
 public:
+    FireSimulator(const Image &givenImage, int given_i, int given_j);
 
-FireSimulator(const Image& givenImage);
+    // lets us go to the next step (t = t+1)
+    void nextStep();
 
-//lets us go to the next step (t = t+1)
-void nextStep();
+    // uses the nextStep function n times to advance by n steps (t = t + n at the end)
+    void advanceByNSteps(int n);
 
-//uses the nextStep function n times to advance by n steps (t = t + n at the end)
-void advanceByNSteps(int n);
-
-//returns the image at step n from beginning (at t = n)
-Image getImageOfStepN(int n);
-
+    // returns the image at step n from beginning (at t = n)
+    Image getImageOfStepN(int n);
 
 private:
-//will be used to store the index of all of the pixels that are part of forest zones (aka zones of green pixels)
-set<int> setOfForestPixels;
+    // will be used to store the index of all of the pixels that are part of forest zones (aka zones of green pixels)
+    // set<int> setOfForestPixels;
 
-//queue that will store vectors of pixels that have been burnt by time
-queue<vector<int>> queueOfBurntPixels;
+    // queue that will store vectors of pixels that have been burnt by time
+    queue<vector<int>> queueOfBurntPixels;
 
-//used to get the forest zones and to keep track of the zones while it burns
-Analyst fireAnalyst;
+    // used to get the forest zones and to keep track of the zones while it burns
+    Analyst fireAnalyst;
 
-//storing the step we are currently at
-int stepCounter;
-int startingPoint;
-Image modifiedImage;
+    unordered_map<int, bool> burningPixelsBorder;
+
+    // storing the step we are currently at
+    int stepCounter;
+    int startingPoint;
+    Image modifiedImage;
+    //keeping track of how many pixels we can burn starting at step t to step t+1
+    int nbOfPossibleBurntPixels;
 };
 
 #endif
