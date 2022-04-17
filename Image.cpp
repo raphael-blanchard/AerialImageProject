@@ -186,7 +186,7 @@ void Image::setPixel(int i, int j, Color col)
 //O(1)
 void Image::setPixel(int i, Color col)
 {
-     assert(1 <= i && i <= height()*width());
+     assert(1 <= i && i <= size());
      pixelMatrix.at(i-1) = col;
 }
 
