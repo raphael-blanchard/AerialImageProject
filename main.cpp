@@ -18,7 +18,7 @@ using namespace std;
 
 int main(void)
 {
-  // srand(time(nullptr));
+  srand(time(nullptr));
 
   // Image firstImage = Image(10, 10);
   // firstImage.setPixel(1, 2, Color::White);
@@ -29,7 +29,7 @@ int main(void)
   //      << firstImage.width() << endl
   //      << firstImage.size() << endl;
 
-  // Image secondImage = Image::readAIP("img0");
+  Image secondImage = Image::readAIP("img0");
   // secondImage.DisplayImageInTerminal();
   // secondImage.writeSVG("firstfiletest", 20);
   // // cout << "width of matrix is: " << secondImage.getWidthOfMatrix("amazonie_0.aip") << endl;
@@ -41,10 +41,10 @@ int main(void)
   // cout << "the pair is: (" << testingPair.first << ", " << testingPair.second << ")" << endl;
   // cout << "nb of pixels inside is: " << secondImage.getNumberOfPixels() << endl;
 
-  // string fileName = "amazonie1";
-  // secondImage.writeAIP(fileName);
-  // Image thirdImage = Image::readAIP(fileName);
-  // thirdImage.writeSVG(fileName, 20);
+  string fileName = "amazonie1";
+  secondImage.writeAIP(fileName);
+  Image thirdImage = Image::readAIP(fileName);
+  thirdImage.writeSVG(fileName, 20);
 
   // // bool testingbool = (secondImage==firstImage);
   // cout << "are these pixels consecutive pixels? " << secondImage.areConsecutivePixels(1, 49, 1, 50) << endl;
@@ -71,6 +71,7 @@ int main(void)
   test.setPixel(8, Color::makeColor(4));
   test.setPixel(9, Color::makeColor(2));
   Analyst firstAnalyst = Analyst(test);
+  firstAnalyst.getImage().DisplayImageInTerminal();
 
   // firstAnalyst.getImage().DisplayImageInTerminal();
   // //firstAnalyst.getImage().DisplayImageInTerminal();
@@ -92,25 +93,39 @@ int main(void)
   // cout << "i is " << coordinates.first << " and j is " << coordinates.second << endl;
 
 
-  vector<pair<int, int>> test1 = {{1,2}, {3,4}, {5,6}};
-  test1.erase(test1.begin()+2);
-  for (int i = 0; i < (int)test1.size(); i++){
-    cout << test1[i].first << " - " << test1[i].second << endl;
-  }
-  cout << endl;
-  cout << (int)test1.size() << endl;
-  test1.push_back({7,8});
-  test1.push_back({10,11});
-  for (int i = 0; i < (int)test1.size(); i++){
-    cout << test1[i].first << " - " << test1[i].second << endl;
-  }
-  // FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"), 1, 1);
-  // //cout << "Start of the simulation, press 1 and enter to continue, 0 to stop" << endl;
-  // // firstSimulator.nextStep();
-  // // cout << "first potential burns: " << endl;
-  // //firstSimulator.nextStep();
-  // // firstSimulator.nextStep();
-  // firstSimulator.advanceByNSteps(3);
+  // vector<pair<int, int>> test1 = {{1,2}, {3,4}, {5,6}};
+  // test1.erase(test1.begin()+2);
+  // for (int i = 0; i < (int)test1.size(); i++){
+  //   cout << test1[i].first << " - " << test1[i].second << endl;
+  // }
+  // cout << endl;
+  // cout << (int)test1.size() << endl;
+  // test1.push_back({7,8});
+  // test1.push_back({10,11});
+  // for (int i = 0; i < (int)test1.size(); i++){
+  //   cout << test1[i].first << " - " << test1[i].second << endl;
+  // }
+  //FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"), 28,15);
+  Image fullForest = Image(30,30);
+  fullForest.fillRectangle(0,0,29,29, Color::Green);
+  FireSimulator firstSimulator = FireSimulator(fullForest, 15,15);
+  //cout << "Start of the simulation, press 1 and enter to continue, 0 to stop" << endl;
+  // firstSimulator.nextStep();
+  // cout << "first potential burns: " << endl;
+  //firstSimulator.nextStep();
+  // firstSimulator.nextStep();
+  Image firstOne = firstSimulator.getImageOfStepN(17);
+  Image secondOne = firstSimulator.getImageOfStepN(18);
+  Image thirdOne = firstSimulator.getImageOfStepN(19);
+  Image fourthOne = firstSimulator.getImageOfStepN(20);
+  firstOne.writeSVG("firstOne", 10);
+  secondOne.writeSVG("secondOne", 10);
+  thirdOne.writeSVG("thirdOne", 10);
+  fourthOne.writeSVG("fourthOne", 10);
+
+
+  int rndtest = rand() % 100;
+  cout << "rnd trest is " << rndtest << endl;
 
 
 

@@ -16,275 +16,202 @@ FireSimulator::FireSimulator(const Image &givenImage, int given_i, int given_j) 
     // converting to a single dimension coordinate
     startingPoint = (given_i - 1) * modifiedImage.width() + (given_j - 1) + 1;
     stepCounter = 0;
-    nbOfPotentialBurns = 0;
+    // nbOfPotentialBurns = 0;
+    for (int i = 0; i < (int)modifiedImage.size(); i++)
+    {
+        //{false, false} : the first one is for the burning pixels, second one is for the ashes
+        vectOfPairs.push_back({modifiedImage.getPixel(i + 1), {false, false}});
+    }
 
     modifiedImage.DisplayImageInTerminal();
     cout << endl;
 }
 
-
-// function to check if the pixel at index (starting from 0) givenIndex can be border (not surrounded by Red pixels)
-bool FireSimulator::isValid(int givenIndex)
+// function that adds the indexes of the pixels that can be burned in the step we are at
+void FireSimulator::addToPotentialBurningPixels(int givenIndex)
 {
     assert(givenIndex >= 0 && givenIndex < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green)
+    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green && vectOfPairs[givenIndex - 1].second.first == false)
     {
-        return true;
+        // add this index to the potential burning pixels
+        potentialBurningPixels.push_back(givenIndex - 1);
+        // making the bool true to indicate that this pixel has already been added to the potential burning pixels, which will make him never be able to be added again
+        vectOfPairs[givenIndex - 1].second.first = true;
     }
 
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green)
+    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green && vectOfPairs[givenIndex + 1].second.first == false)
     {
-        return true;
+        potentialBurningPixels.push_back(givenIndex + 1);
+        vectOfPairs[givenIndex + 1].second.first = true;
     }
 
-    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Green)
+    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Green && vectOfPairs[givenIndex - modifiedImage.width()].second.first == false)
     {
-        return true;
+        potentialBurningPixels.push_back(givenIndex - modifiedImage.width());
+        vectOfPairs[givenIndex - modifiedImage.width()].second.first = true;
     }
 
-    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Green)
+    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Green && vectOfPairs[givenIndex + modifiedImage.width()].second.first == false)
     {
-        return true;
+        potentialBurningPixels.push_back(givenIndex + modifiedImage.width());
+        vectOfPairs[givenIndex + modifiedImage.width()].second.first = true;
     }
-    return false;
 }
 
-void FireSimulator::updateNbOfPotentialBurns(int givenIndex)
+// function that adds the indexes of the pixels that can be burned in the step we are at
+void FireSimulator::addToPotentialAshes(int givenIndex)
 {
-    assert(givenIndex >= 0 && givenIndex < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green)
+    if (givenIndex < 0 || givenIndex > modifiedImage.size() || modifiedImage.getPixel(givenIndex + 1) != Color::Black)
     {
-        nbOfPotentialBurns++;
+        return;
     }
 
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green)
+    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Red && vectOfPairs[givenIndex - 1].second.second == false)
     {
-        nbOfPotentialBurns++;
+        // add this index to the potential burning pixels
+        potentialAshes.push_back(givenIndex - 1);
+        // making the bool true to indicate that this pixel has already been added to the potential burning pixels, which will make him never be able to be added again
+        vectOfPairs[givenIndex - 1].second.second = true;
+        // addToPotentialAshes(givenIndex - 1);
     }
 
-    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Green)
+    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Red && vectOfPairs[givenIndex + 1].second.second == false)
     {
-        nbOfPotentialBurns++;
+        potentialAshes.push_back(givenIndex + 1);
+        vectOfPairs[givenIndex + 1].second.second = true;
+        // addToPotentialAshes(givenIndex + 1);
     }
 
-    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Green)
+    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Red && vectOfPairs[givenIndex - modifiedImage.width()].second.second == false)
     {
-        nbOfPotentialBurns++;
+        potentialAshes.push_back(givenIndex - modifiedImage.width());
+        vectOfPairs[givenIndex - modifiedImage.width()].second.second = true;
+        // addToPotentialAshes(givenIndex - modifiedImage.width());
+    }
+
+    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Red && vectOfPairs[givenIndex + modifiedImage.width()].second.second == false)
+    {
+        potentialAshes.push_back(givenIndex + modifiedImage.width());
+        vectOfPairs[givenIndex + modifiedImage.width()].second.second = true;
+        // addToPotentialAshes(givenIndex - modifiedImage.width());
     }
 }
 
-int FireSimulator::getNbOfNeighbors(int givenIndex){
-    assert(givenIndex >= 0 && givenIndex < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-    int total = 0;
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green)
-    {
-        total++;
-    }
-
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green)
-    {
-        total++;
-    }
-
-    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Green)
-    {
-        total++;
-    }
-
-    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Green)
-    {
-        total++;
-    }
-
-    return total;
-}
-
-
-void FireSimulator::displayBorder(){
-    for (int i = 0; i < (int)border.size(); i++){
-        cout << "|" << border[i].first << " and " << border[i].second << "|" << endl;
-    }
-}
-
-void FireSimulator::updateBorder(int givenIndex){
-    assert(givenIndex >= 0 && givenIndex < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Red)
-    {
-        border[givenIndex - 1].second--;
-        if (border[givenIndex - 1].second == 0){
-            border.erase(border.begin() + givenIndex - 1 - 1);
-        }
-    }
-
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Red)
-    {
-        border[givenIndex + 1].second--;
-        if (border[givenIndex + 1].second == 0){
-            border.erase(border.begin() + givenIndex + 1 - 1);
-        }
-    }
-
-    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Red)
-    {
-        border[givenIndex - modifiedImage.width()].second--;
-        if (border[givenIndex - modifiedImage.width()].second == 0){
-            border.erase(border.begin() + givenIndex - modifiedImage.width() - 1);
-        }
-    }
-
-    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Red)
-    {
-        border[givenIndex + modifiedImage.width()].second--;
-        if (border[givenIndex + modifiedImage.width()].second == 0){
-            border.erase(border.begin() + givenIndex + modifiedImage.width() - 1);
-        }
-    }
-}
-
-
-// Direction index:
-// top := 0
-// right := 1
-// bottom := 2
-// left := 3
-void FireSimulator::nextStep()
+void FireSimulator::nextStep() throw(int)
 {
+    if ( stepCounter>0 && (int)potentialBurningPixels.size() == 0 && (int)potentialAshes.size() == 0)
+    {
+        throw(stepCounter);
+        return;
+    }
     // no assertion needed for the starting point as we previously checked it in the constructor
     if (stepCounter == 0)
     {
         cout << startingPoint << endl;
-        //cout << border[0].first << " and " << border[0].second << endl;
+        // cout << border[0].first << " and " << border[0].second << endl;
         modifiedImage.setPixel(startingPoint, Color::Red);
-        border.push_back({startingPoint - 1, getNbOfNeighbors(startingPoint-1)});
-        modifiedImage.DisplayImageInTerminal();
-        updateNbOfPotentialBurns(startingPoint - 1);
+        addToPotentialBurningPixels(startingPoint - 1); // starting point can be 1 but the input to this function can be 0
         stepCounter++;
     }
     else
     {
-        // change this later on with gaussian probabilities to get a more realistic approach of the simulation
-        int randNbOfPixels = (rand() % nbOfPotentialBurns) + 1; // getting a random number of pixels that will start to burn during this step
-        cout << "maximum that we can burn is " << nbOfPotentialBurns << endl;
-        cout << "number of pixel we will burn: " << randNbOfPixels << endl;
-
-        // vector we use to store the indexes of pixels we will burn in the loop
-        // which will be used later on to get the new borders after everything in this step that needs to be burning is burning
-        vector<int> vectOfFutureBorders = {};
-        for (int i = 0; i < randNbOfPixels; i++)
+        vector<int> indexOfBurning = {};
+        vector<int> indexOfBurnt = {};
+        if ((int)potentialBurningPixels.size() > 0)
         {
-            cout << "WHEN IS SEGFAULT 1" << endl;
-            cout << "size of border is " << (int)border.size() << endl;
-            displayBorder();
-            // for (int i = 0; i < (int)border.size(); i++)
-            // {
-            //     cout << border[i].first << " - " << border[i].second << " ; ";
-            // }
-            cout << endl;
-            int randomIndex = rand() % (int)border.size(); // rnd number from 0 to the size of the border
-            cout << "WHEN IS SEGFAULT 1bis" << endl;
-            cout << "the random index is " << randomIndex << endl;
-            cout << "WHEN IS SEGFAULT 1bisbis" << endl;
-            cout << "value at random index is: " << border[randomIndex].first << endl;
-
-            cout << "WHEN IS SEGFAULT 2" << endl;
-            // getting a vector of the pixels we can burn from the pixel at index border[randomIndex]
-            //(eg. pixel at index 0 can only burn the one on its right and under itself (if they are forest pixels))
-            // so tmpVector will be [1,50] in this specific example
-            vector<int> tmpVector = getBurnablePixels(border[randomIndex].first);
-            cout << "WHEN IS SEGFAULT 3" << endl;
-            cout << "WHEN IS SEGFAULT 3bis" << endl;
-            for (int item : tmpVector)
+            int rndNbOfPixelsBurned = rand() % (int)potentialBurningPixels.size() + 1;
+            for (int i = 0; i < rndNbOfPixelsBurned; i++)
             {
-                cout << item << endl;
+                int rndIndex = rand() % (int)potentialBurningPixels.size(); // getting a random index of the vector potentialBurningPixels
+
+                modifiedImage.setPixel(potentialBurningPixels[rndIndex] + 1, Color::Red);
+
+                // adding the index to a tmp vector, which we will iterate through at the end of the loop to update the border
+                indexOfBurning.push_back(potentialBurningPixels[rndIndex]);
+                // addToPotentialBurningPixels(potentialBurningPixels[rndIndex]);
+                potentialBurningPixels.erase(potentialBurningPixels.begin() + rndIndex);
             }
-            cout << endl;
-            cout << "WHEN IS SEGFAULT 4" << endl;
-            // getting a random index of the tmpVector containing pixels we want to burn
-            int randomPixelOfVector = rand() % (int)tmpVector.size();
-            cout << "burning at index " << tmpVector[randomPixelOfVector] << endl;
-            // burning the pixel we got
-            cout << "WHEN IS SEGFAULT 5" << endl;
-            modifiedImage.setPixel(tmpVector[randomPixelOfVector] + 1, Color::Red);
-            //decrementing the number of pixels the pixel at index border[randomIndex] can burn
-            updateBorder(tmpVector[randomPixelOfVector]);
-            
-            //updateBorder();
-
-            cout << "WHEN IS SEGFAULT 6" << endl;
-            vectOfFutureBorders.push_back(tmpVector[randomPixelOfVector]);
-
-            // //storing the index of the pixel into the vectOfFutureBorders to later on define the new borders (+1 as addPossiblePixelsToBorder takes an input >= 1)
-            // vectOfFuturePotentialBurns.push_back(tmpVector[randomPixelOfVector]+1);
-
-            cout << "WHEN IS SEGFAULT 7" << endl;
-            // delete from not burned border
-            updateNbOfPotentialBurns(border[randomIndex].first);
-            cout << "WHEN IS SEGFAULT 8" << endl;
-            modifiedImage.DisplayImageInTerminal();
         }
-        // for (int i = 0; i < (int)vectOfFuturePotentialBurns.size(); i++){
-        //     //adding the new potential burning pixels to the vector
-        //     addPossiblePixelsToBorder(vectOfFuturePotentialBurns[i]);
-        // }
 
-        cout << "invalid pointer under ??" << endl;
-        cout << "size of the vect " << (int)vectOfFutureBorders.size() << endl;
-        for (int i = 0; i < (int)vectOfFutureBorders.size(); i++)
+        // when ashes start to appear
+        if (stepCounter > 3)
         {
-            cout  << "vectOfFutureBorders[i]=" << vectOfFutureBorders[i] << endl;
-            // added the pixel at index tmpVector[randomPixelOfVector] to the border vector if is not surrounded by red pixels
-            if (isValid(vectOfFutureBorders[i]))
+            if (stepCounter == 4)
             {
-                int first = vectOfFutureBorders[i];
-                int second = getNbOfNeighbors(vectOfFutureBorders[i]);
-                pair<int, int> tmpPair = {first, second};
-                border.push_back(tmpPair);
+                modifiedImage.setPixel(startingPoint, Color::Black);
+                addToPotentialAshes(startingPoint - 1);
             }
-            displayBorder();
+            else
+            {
+                int rndNbOfAshes = rand() % (int)potentialAshes.size() + 1;
+                for (int i = 0; i < rndNbOfAshes; i++)
+                {
+                    int rndIndex = rand() % (int)potentialAshes.size(); // getting a random index of the vector potentialBurningPixels
+                    modifiedImage.setPixel(potentialAshes[rndIndex] + 1, Color::Black);
+                    cout << "index of ash is " << potentialAshes[rndIndex] << endl;
+
+                    // adding the index to a tmp vector, which we will iterate through at the end of the loop to update the border
+                    indexOfBurnt.push_back(potentialAshes[rndIndex]);
+                    // updating the pixels that can be burned in this step
+                    // addToPotentialAshes(potentialAshes[rndIndex]);
+                    potentialAshes.erase(potentialAshes.begin() + rndIndex);
+                }
+            }
         }
-        
+        cout << "step counter is " << stepCounter << endl;
+        for (int i = 0; i < (int)indexOfBurning.size(); i++)
+        {
+            cout << (indexOfBurning[i]) << " | ";
+        }
+        cout << endl;
+        for (int i = 0; i < (int)indexOfBurnt.size(); i++)
+        {
+            cout << (indexOfBurnt[i]) << " - ";
+        }
+        cout << endl;
+
+        // updating the borders
+        for (int i = 0; i < (int)indexOfBurning.size(); i++)
+        {
+            addToPotentialBurningPixels(indexOfBurning[i]);
+        }
+        for (int i = 0; i < (int)indexOfBurnt.size(); i++)
+        {
+            addToPotentialAshes(indexOfBurnt[i]);
+        }
+
+        cout << "added to the burning pixels and ashes" << endl;
+        for (int i = 0; i < (int)potentialBurningPixels.size(); i++)
+        {
+            cout << (potentialBurningPixels[i]) << " | ";
+        }
+        cout << endl;
+        for (int i = 0; i < (int)potentialAshes.size(); i++)
+        {
+            cout << (potentialAshes[i]) << " - ";
+        }
+        cout << endl;
         stepCounter++;
     }
-}
-
-vector<int> FireSimulator::getBurnablePixels(int givenIndex)
-{
-    // cout << "start of burnable function" << endl;
-    // cout << "given index is " << givenIndex << endl;
-    assert(givenIndex >= 0);
-    assert(givenIndex < modifiedImage.size());
-    assert(modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-    vector<int> tmpVector;
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green)
-    {
-        tmpVector.push_back(givenIndex - 1);
-    }
-
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green)
-    {
-        tmpVector.push_back(givenIndex + 1);
-    }
-
-    if (givenIndex - modifiedImage.width() >= 0 && modifiedImage.getPixel(givenIndex + 1 - modifiedImage.width()) == Color::Green)
-    {
-        tmpVector.push_back(givenIndex - modifiedImage.width());
-    }
-
-    if (givenIndex + modifiedImage.width() < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + modifiedImage.width()) == Color::Green)
-    {
-        tmpVector.push_back(givenIndex + modifiedImage.width());
-    }
-    return tmpVector;
+    // modifiedImage.DisplayImageInTerminal();
 }
 
 void FireSimulator::advanceByNSteps(int n)
 {
     while (stepCounter < n)
     {
-        nextStep();
+        try
+        {
+            nextStep();
+        }
+        catch (int e)
+        {
+            cout << "END OF THE SIMULATION. YOU HAVE BURNED DOWN A FOREST." <<endl;
+            cout << "IT TOOK " << e << " STEPS." << endl;
+            exit(1);
+        }
     }
+    modifiedImage.writeSVG("fireSimulator1", 10);
 }
 
 Image FireSimulator::getImageOfStepN(int n)
