@@ -44,16 +44,20 @@ private:
     // used to get the forest zones and to keep track of the zones while it burns
     Analyst fireAnalyst;
 
-
     // storing the step we are currently at
     int stepCounter;
+    //starting point of the fire
     int startingPoint;
+
     Image modifiedImage;
 
     // used to check if a pixel has already been added to the indexOfPossibleBurningPixels before adding them (first bool)
     //and check if they have been to the potentialAshes (second bool)
     vector< pair<Color, pair<bool, bool> > > vectOfPairs; 
+    
+    //vector of the indexes of pixels that can be burned in the next step
     vector<int> potentialBurningPixels;
+    //vector of the indexes of pixels that can become ashes in the next step
     vector<int> potentialAshes;
     
 
