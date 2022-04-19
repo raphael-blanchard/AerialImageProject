@@ -82,6 +82,8 @@ int Analyst::find(int index)
     }
 }
 
+//NEED TO USE SHARED POINTERS HERE AND MAKE THE DESTRUCTOR
+
 //O(k) - k being the size of the smallest zone between the zone in which index1 is in and the zone in which index2 is in
 void Analyst::merge(int index1, int index2)
 {
