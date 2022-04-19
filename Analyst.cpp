@@ -66,8 +66,10 @@ void Analyst::DisplayLL()
     }
 }
 
-//O(n)
+//O(n) : worst case is when all of the pixels are in the same zone, which means there will be one similar linked list for everyone.
+//if we try to get the representant of the last added pixel of this linked list, it will call n times this function
 //Omeg(1) when the the pixel at coordinate index is the representant
+//function that returns the index of the representant of the zone in which the pixel at coordinate index is
 int Analyst::find(int index)
 {
     if (vectOfPointers[index].listOfNodes->front().representant == index)
@@ -80,6 +82,7 @@ int Analyst::find(int index)
     }
 }
 
+//O(k) - k being the size of the smallest zone between the zone in which index1 is in and the zone in which index2 is in
 void Analyst::merge(int index1, int index2)
 {
     assert(index1 < analyzedImage.size() && index1 >= 0 && index2 < analyzedImage.size() && index2 >= 0);
@@ -91,7 +94,7 @@ void Analyst::merge(int index1, int index2)
         //in the same LL so we don't need to concatenate them
     }
 
-    //putting the LL of index1 after the LL at index2
+    //putting the LL of index1 after the LL at index2 as it is the smallest of the two, which makes us do less steps than doing the opposite
     if (*(vectOfPointers[index1].size) <= *(vectOfPointers[index2].size))
     {
         vector<int> tmpVectOfIndexes;
@@ -110,6 +113,7 @@ void Analyst::merge(int index1, int index2)
             vectOfPointers[index].size = vectOfPointers[index2].size;
         }
     }
+    //putting the LL of index2 after the LL at index1
     else
     {
         vector<int> tmpVectOfIndexes;
@@ -132,6 +136,10 @@ void Analyst::merge(int index1, int index2)
     }
 }
 
+//function that calls the merge function with the bottom and right pixel (if they exist and are valid) of all of the pixel of the image, 
+//which will, in the end, put every pixel of a zone in the same zone and this, for every existing zone of the image
+//O(n*k) - n being the number of pixels in the image and k being the size of the smallest zone that we're trying to merge for each pixel
+//O(sum from 1 to size O(k)) = O(n*k)
 void Analyst::mergeAll()
 {
     for (int i = 1; i <= analyzedImage.size(); i++)
@@ -160,11 +168,15 @@ void Analyst::mergeAll()
     }
 }
 
+//O(1)
+//function that returns the image.
 Image Analyst::getImage() const
 {
     return analyzedImage;
 }
 
+//function that fills the zone in which pixel at coordinates (i,j) is, with the color c
+//O(n)
 Image Analyst::fillZone(int i, int j, Color c)
 {
     // creating a copy of the image
@@ -176,13 +188,13 @@ Image Analyst::fillZone(int i, int j, Color c)
     return tmpImage;
 }
 
-// O(w*h) function as in the worst case, the entire matrix contains the same color as the pixel at position (i, j), which will mean we travel through the entire matrix
-// function that will get recursively called to execute what we call a flood fill
+// O(n) - n being the number of pixels in the image
+//in the worst case, the entire matrix contains the same color as the pixel at position (i, j), which will mean we travel through the entire matrix
+//DFS inspired method called floodFill
 void Analyst::fillZoneDFS(Image &givenImage, int i, int j, Color previousColor, Color c)
 {
 
     // checking if i and j are valid inputs for the image in a first place, that way we can't get any out of bounds errors while checking the conditions after
-
     // then checking if the color given is already the color of our starting pixel, which means we shouldn't do anything
 
     // then checking if the Color of the pixel we're looking at is different than the previousColor, which means we found a neighbor
@@ -208,9 +220,9 @@ void Analyst::fillZoneDFS(Image &givenImage, int i, int j, Color previousColor, 
     fillZoneDFS(givenImage, i, j + 1, previousColor, c);
 }
 
-// function that will take in parameters a set of integers (indexes of the coordinates transormed by the toIndex function)
-// this algorithm will realize a DFS, by callingitself four times, once for every pixel around the pixel we're looking at (pixel on top, under, on the left and on the right)
-
+//function that checks if two pixels are in the same zone
+//O(n) in the worst case as find is O(n)
+//Omeg(1) if pixel at coordinates (i1,j1) and pixel at coordinates (i2,j2) are both the representant of their zone and if they're not in the same zone(can't be in the same zone if each representant anyway)
 bool Analyst::belongToTheSameZone(int i1, int j1, int i2, int j2)
 {
     int widthOfImage = analyzedImage.width();
@@ -219,32 +231,43 @@ bool Analyst::belongToTheSameZone(int i1, int j1, int i2, int j2)
     return find(i1 * widthOfImage + j1) == find(i2 * widthOfImage + j2);
 }
 
+//O(1) as we store a vector of the number of pixels of each color. the indexes of this vector are corresponding to the values of the color 
+//eg. vectOfNbOfPixelsPerColor[0] corresponds to the number of pixels with the color Black
 int Analyst::nbPixelsOfColor(Color c) const
 {
     return vectOfNbOfPixelsPerColor.at(c.toInt());
 }
 
+//same idea but for the nb of zones of a certain color
+//as we have initialized (in the constructor) and decremented these values each time we were merging zones, we can return this value in constant time
+//O(1) function
+//same eg. vectOfNbOfZonesPerColor[0] will correspond to the number of zones of color black in the image analyzed
 int Analyst::nbZonesOfColor(Color c) const
 {
-    //as we have initialized (in the constructor) and decremented these values each time we were merging zones
-    //we can return this value in constant time
-    //O(1) function
+
     return vectOfNbOfZonesPerColor.at(c.toInt());
 }
 
+//O(1)
 int Analyst::nbZones() const
 {
-    // simply returning the size of the vect containing the sets, since every set is one zone
+    //as we set the number of zones to the number of pixels at the beginning
+    //then decrement this value each time we merge zones
+    //we can return this in constant time
     return zoneCount;
-    //O(1) operation
 }
 
+
+//function that returns a set of the indexes of the pixels that are in the zone in which pixel at coordinates (i,j) is (him included)
+//O(n) - n being the number of pixels in the image. worst case is when there's only one zone, so we are iterating n times
+//Theta(k) in general, k being the size of the zone in which pixel at coordinates (i, j) is
 set<int> Analyst::zoneOfPixel(int i, int j)
 {
     assert(i >= 0 && i <analyzedImage.height() && j >= 0 && j < analyzedImage.width());
     set<int> tmpSet;
     int indexOfPixel = analyzedImage.toIndex(i,j);
     for (auto it = vectOfPointers[indexOfPixel].listOfNodes->begin(); it != vectOfPointers[indexOfPixel].listOfNodes->end(); ++it){
+        //constant operation
         tmpSet.insert(it->indexOfPixel);
     }
     return tmpSet;
