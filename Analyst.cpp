@@ -9,10 +9,11 @@
 #include <cassert>
 #include "Analyst.h"
 
+//O(n) - n being the number of pixels in the image
 Analyst::Analyst(const Image &img) : analyzedImage(img)
 {
-    zoneCount = analyzedImage.height() * analyzedImage.width();
-    for (int i = 0; i < analyzedImage.height() * analyzedImage.width(); i++)
+    zoneCount = analyzedImage.size();
+    for (int i = 0; i < analyzedImage.size(); i++)
     {
         vectOfPointers.push_back(Head());
         vectOfPointers[i].size = new int(1);
@@ -42,6 +43,8 @@ Analyst::Analyst(const Image &img) : analyzedImage(img)
     cout << "number of zones: " << zoneCount << endl;
 }
 
+
+//function for us to see how the linked list reacts, don't put in report
 void Analyst::DisplayLL()
 {
 
@@ -63,6 +66,8 @@ void Analyst::DisplayLL()
     }
 }
 
+//O(n)
+//Omeg(1) when the the pixel at coordinate index is the representant
 int Analyst::find(int index)
 {
     if (vectOfPointers[index].listOfNodes->front().representant == index)

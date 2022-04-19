@@ -10,6 +10,7 @@
 #include <ctime>
 #include <sstream>
 #include "FireSimulator.h"
+#include <unistd.h>
 
 // library needed to read text files
 #include <fstream>
@@ -105,23 +106,37 @@ int main(void)
   // for (int i = 0; i < (int)test1.size(); i++){
   //   cout << test1[i].first << " - " << test1[i].second << endl;
   // }
-  //FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"), 28,15);
+  FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"), 28,15);
   Image fullForest = Image(30,30);
   fullForest.fillRectangle(0,0,29,29, Color::Green);
-  FireSimulator firstSimulator = FireSimulator(fullForest, 15,15);
+  //FireSimulator firstSimulator = FireSimulator(fullForest, 1,1);
   //cout << "Start of the simulation, press 1 and enter to continue, 0 to stop" << endl;
   // firstSimulator.nextStep();
   // cout << "first potential burns: " << endl;
   //firstSimulator.nextStep();
   // firstSimulator.nextStep();
-  Image firstOne = firstSimulator.getImageOfStepN(17);
-  Image secondOne = firstSimulator.getImageOfStepN(18);
-  Image thirdOne = firstSimulator.getImageOfStepN(19);
-  Image fourthOne = firstSimulator.getImageOfStepN(20);
-  firstOne.writeSVG("firstOne", 10);
-  secondOne.writeSVG("secondOne", 10);
-  thirdOne.writeSVG("thirdOne", 10);
-  fourthOne.writeSVG("fourthOne", 10);
+
+
+  // Image firstOne = firstSimulator.getImageOfStepN(35);
+  // Image secondOne = firstSimulator.getImageOfStepN(36);
+  // Image thirdOne = firstSimulator.getImageOfStepN(37);
+  // Image fourthOne = firstSimulator.getImageOfStepN(77);
+  // firstOne.writeSVG("firstOne", 10);
+  // secondOne.writeSVG("secondOne", 10);
+  // thirdOne.writeSVG("thirdOne", 10);
+  // fourthOne.writeSVG("fourthOne", 10);
+  string simulationInput;
+  int simulationStep = 0;
+  cout << "Start of the simulation." << endl << "ENTER key to continue, ANY OTHER key to stop" << endl;
+  getline(cin, simulationInput);
+  while (simulationInput.size() == 0){
+    Image simulationImg = firstSimulator.getImageOfStepN(simulationStep);
+    simulationImg.writeSVG("simulationImg", 10);
+    simulationStep++;
+    // cout <<  "ENTER key to continue, ANY OTHER key to stop" << endl;
+    // getline(cin, simulationInput);
+    sleep(1);
+  }
 
 
   int rndtest = rand() % 100;

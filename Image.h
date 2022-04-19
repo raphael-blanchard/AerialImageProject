@@ -26,7 +26,7 @@ public:
   /// w is the width of this image, h is its height
   Image(int w, int h);
 
-  Image();
+  // Image();
 
   /// Destructor
   //not needed

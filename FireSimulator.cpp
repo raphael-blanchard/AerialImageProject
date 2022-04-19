@@ -31,7 +31,7 @@ FireSimulator::FireSimulator(const Image &givenImage, int given_i, int given_j) 
 void FireSimulator::addToPotentialBurningPixels(int givenIndex)
 {
     assert(givenIndex >= 0 && givenIndex < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1) == Color::Red);
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green && vectOfPairs[givenIndex - 1].second.first == false)
+    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Green && vectOfPairs[givenIndex - 1].second.first == false && (givenIndex-1)%modifiedImage.width() < givenIndex%modifiedImage.width())
     {
         // add this index to the potential burning pixels
         potentialBurningPixels.push_back(givenIndex - 1);
@@ -39,7 +39,7 @@ void FireSimulator::addToPotentialBurningPixels(int givenIndex)
         vectOfPairs[givenIndex - 1].second.first = true;
     }
 
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green && vectOfPairs[givenIndex + 1].second.first == false)
+    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Green && vectOfPairs[givenIndex + 1].second.first == false && (givenIndex+1)%modifiedImage.width() > givenIndex%modifiedImage.width())
     {
         potentialBurningPixels.push_back(givenIndex + 1);
         vectOfPairs[givenIndex + 1].second.first = true;
@@ -66,7 +66,7 @@ void FireSimulator::addToPotentialAshes(int givenIndex)
         return;
     }
 
-    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Red && vectOfPairs[givenIndex - 1].second.second == false)
+    if (givenIndex - 1 >= 0 && modifiedImage.getPixel(givenIndex + 1 - 1) == Color::Red && vectOfPairs[givenIndex - 1].second.second == false && (givenIndex-1)%modifiedImage.width() < givenIndex%modifiedImage.width())
     {
         // add this index to the potential burning pixels
         potentialAshes.push_back(givenIndex - 1);
@@ -75,7 +75,7 @@ void FireSimulator::addToPotentialAshes(int givenIndex)
         // addToPotentialAshes(givenIndex - 1);
     }
 
-    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Red && vectOfPairs[givenIndex + 1].second.second == false)
+    if (givenIndex + 1 < modifiedImage.size() && modifiedImage.getPixel(givenIndex + 1 + 1) == Color::Red && vectOfPairs[givenIndex + 1].second.second == false && (givenIndex+1)%modifiedImage.width() > givenIndex%modifiedImage.width())
     {
         potentialAshes.push_back(givenIndex + 1);
         vectOfPairs[givenIndex + 1].second.second = true;

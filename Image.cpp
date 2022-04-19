@@ -59,6 +59,7 @@ void Image::writeSVG(const std::string &filename, int pixelSize) const
      file.close();
 }
 
+//O(n) - n being the number of pixels in the image, n = w*h 
 Image::Image(int w, int h)
 {
      heightVal = h;
@@ -73,11 +74,14 @@ Image::Image(int w, int h)
      // O(w*h)
 }
 
-Image::Image(){
-     widthVal = 0;
-     heightVal = 0;
-}
 
+// Image::Image(){
+//      widthVal = 0;
+//      heightVal = 0;
+// }
+
+// creating an image with another object from the Image class; creating a copy
+// O(n) - n being the number of pixels in the image, n = w*h 
 Image::Image(const Image& img){
      // assert (img.size() == size());
      //if can't assert this, do an if condition and push_back what's needed
@@ -101,14 +105,7 @@ int Image::height() const
      return heightVal;
 }
 
-// void Image::setHeight(int n) {
-//      heightVal = n;
-// }
-
-// void Image::setWidth(int n){
-//      widthVal = n;
-// }
-
+//O(1)
 vector<Color> Image::getVectorOfColors(){
      return pixelMatrix;
 }
@@ -119,6 +116,8 @@ int Image::size() const
      return heightVal * widthVal;
 }
 
+//O(n) - n being the number of pixels in the image, n = w*h 
+//we iterate through each line of the image and for each pixels we do a constant operation, so its of the order of h*w
 Image Image::readAIP(const std::string &filename)
 {
      // ask what precondition do we need for this method.
@@ -190,7 +189,7 @@ void Image::setPixel(int i, Color col)
      pixelMatrix.at(i-1) = col;
 }
 
-//O(w*h)
+//O(n) - n being the number of pixels in the image, n = w*h 
 void Image::DisplayImageInTerminal()
 {
      for (int i = 0; i < heightVal * widthVal; i++)
@@ -204,6 +203,7 @@ void Image::DisplayImageInTerminal()
      cout << endl;
 }
 
+// O(k) k being the size of the first line of an AIP file 
 int Image::getHeightOfMatrix(const std::string &filename)
 {
      string heightOfMatrixSTD;
@@ -231,6 +231,7 @@ int Image::getHeightOfMatrix(const std::string &filename)
      return heightOfMatrix;
 }
 
+//O(k) same as previous function
 int Image::getWidthOfMatrix(const std::string &filename)
 {
      string widthOfMatrixSTD;
@@ -260,10 +261,12 @@ int Image::getWidthOfMatrix(const std::string &filename)
      return widthOfMatrix;
 }
 
+//O(1)
 int Image::toIndex(int i, int j) const{
      return i*width() + j;
 }
 
+//O(1)
 std::pair<int, int> Image::toCoordinate(int k) const{
      //i = k / widthOfMatrix
      //j = k % widthOfMatrix
@@ -273,19 +276,21 @@ std::pair<int, int> Image::toCoordinate(int k) const{
      return tmpPair;
 }
 
+//O(n) - n being the number of pixels in the image, n = w*h 
 void Image::fill(Color c)
 {
-     int heightTimesWidth = heightVal * widthVal;
-     for (int i = 0; i < heightTimesWidth; i++)
+     for (int i = 0; i < size(); i++)
      {
           pixelMatrix.at(i) = c;
      }
 }
 
+//O(1)
 int Image::getNumberOfPixels(){
      return pixelMatrix.size();
 }
 
+//O(n) - n being the number of pixels in the image, n = w*h 
 void Image::writeAIP(const std::string& filename) const {
      //creating an object of the ofstream class
      std::ofstream file;
@@ -348,7 +353,8 @@ bool Image::operator!=(const Image& img) const{
      return true;
 }
 
-//O(1) function to check if pixels at position (i1,j1) and (i2,j2) are consecutive pixels, in one way or the other
+//O(1) 
+//function to check if pixels at position (i1,j1) and (i2,j2) are consecutive pixels, in one way or the other
 bool Image::areConsecutivePixels(int i1, int j1, int i2, int j2){
      assert (i1 < size() && j1 < size() && i2 < size() && j2 < size());
      //as we are representing our matrix of pixels by a vector of Colors, we can just do i*widthVal + j and check the value if they are of by one
@@ -357,6 +363,7 @@ bool Image::areConsecutivePixels(int i1, int j1, int i2, int j2){
      return ((i1*widthVal+j1+1 == i2*widthVal+j2) || (i1*widthVal+j1 == i2*widthVal+j2+1));
 }
 
+//O(s) - s being the number of pixel in the rectangle
 void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
      assert(0<=i1 && i1<widthVal && 0<=i2 && i2<widthVal && 0<=j1 && j1<heightVal && 0<=j2 && j2<heightVal);
      for (int i = i1*widthVal+j1-1 ; i <= i2*widthVal+j2; i++){
@@ -365,11 +372,7 @@ void Image::fillRectangle(int i1, int j1, int i2, int j2, Color c){
           }
      }
 }
-
-// void Image::addPixel(Color c){
-//      pixelMatrix.push_back(c);
-// }
-
+//O(n) - n being the number of pixels in the image we want to create, n = w*h 
 Image makeRandomImage(int w, int h){
      Image tmpImage = Image(w, h);
      for (int i = 1; i <= w*h; i++){
