@@ -37,7 +37,7 @@ public:
   Analyst(const Image& img);
 
   /// No copy
-  //Analyst(const Analyst &) = delete;
+  Analyst(const Analyst &) = delete;
 
   /// No assignment
   Analyst &operator=(const Analyst &) = delete;
@@ -90,10 +90,6 @@ public:
 private:
   //creating a HashMap using Colors as keys and sets of integers as values
   Image analyzedImage;
-  vector < pair<Color, bool> > matrixOfColorAndBool;
-  //used to store in the sets of colors of the same zone
-  //it'll be modified directly in the constructor, that way I can do some simple operations on the set later on for other functions
-  vector< set<int> > vectOfSets;
   vector<Head> vectOfPointers; //vector of linked lists
   vector<int> vectOfNbOfPixelsPerColor;
   vector<int> vectOfNbOfZonesPerColor;

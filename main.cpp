@@ -62,17 +62,17 @@ int main(void)
   // //Image onethousand = makeRandomImage(2000,2000);
   // //onethousand.writeAIP("img10");
   Image test = Image(3,3);
-  test.setPixel(1, Color::makeColor(1));
+  test.setPixel(1, Color::makeColor(3));
   test.setPixel(2, Color::makeColor(4));
   test.setPixel(3, Color::makeColor(4));
-  test.setPixel(4, Color::makeColor(1));
-  test.setPixel(5, Color::makeColor(2));
-  test.setPixel(6, Color::makeColor(2));
-  test.setPixel(7, Color::makeColor(2));
-  test.setPixel(8, Color::makeColor(4));
-  test.setPixel(9, Color::makeColor(2));
-  Analyst firstAnalyst = Analyst(test);
-  firstAnalyst.getImage().DisplayImageInTerminal();
+  test.setPixel(4, Color::makeColor(3));
+  test.setPixel(5, Color::makeColor(4));
+  test.setPixel(6, Color::makeColor(0));
+  test.setPixel(7, Color::makeColor(3));
+  test.setPixel(8, Color::makeColor(0));
+  test.setPixel(9, Color::makeColor(0));
+  Analyst firstAnalyst(test);
+  firstAnalyst.getImage().writeSVG("report", 350);
 
   // firstAnalyst.getImage().DisplayImageInTerminal();
   // //firstAnalyst.getImage().DisplayImageInTerminal();
@@ -106,7 +106,7 @@ int main(void)
   // for (int i = 0; i < (int)test1.size(); i++){
   //   cout << test1[i].first << " - " << test1[i].second << endl;
   // }
-  FireSimulator firstSimulator = FireSimulator(Image::readAIP("img0"), 28,15);
+  FireSimulator firstSimulator(Image::readAIP("img0"), 28,15);
   Image fullForest = Image(30,30);
   fullForest.fillRectangle(0,0,29,29, Color::Green);
   //FireSimulator firstSimulator = FireSimulator(fullForest, 1,1);
@@ -127,16 +127,19 @@ int main(void)
   // fourthOne.writeSVG("fourthOne", 10);
   string simulationInput;
   int simulationStep = 0;
-  cout << "Start of the simulation." << endl << "ENTER key to continue, ANY OTHER key to stop" << endl;
+  cout << endl;
+  cout << "THIS IS THE START OF THE SIMULATION, PLEASE OPEN THE FILE CALLED simulationFile.svg WITH AN SVG VIEWER TO OBSERVE HOW THE SIMULATION GOES ON." << endl;
+  cout << "ENTER key to continue, ANY OTHER key to stop" << endl;
   getline(cin, simulationInput);
   while (simulationInput.size() == 0){
     Image simulationImg = firstSimulator.getImageOfStepN(simulationStep);
-    simulationImg.writeSVG("simulationImg", 10);
+    simulationImg.writeSVG("simulationFile", 10);
     simulationStep++;
-    // cout <<  "ENTER key to continue, ANY OTHER key to stop" << endl;
-    // getline(cin, simulationInput);
+    //sleeping for one second as otherwise it goes too fast for the writeSVG function to actually update the image
     sleep(1);
   }
+
+  //desire to do step by step press one key otherwise blabla
 
 
   int rndtest = rand() % 100;
