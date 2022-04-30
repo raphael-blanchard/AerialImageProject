@@ -27,7 +27,7 @@ public:
     FireSimulator(const Image &givenImage, int given_i, int given_j);
 
     // lets us go to the next step (t = t+1)
-    void nextStep() throw (int);
+    void nextStep();
 
     // uses the nextStep function n times to advance by n steps (t = t + n at the end)
     void advanceByNSteps(int n);
@@ -39,6 +39,8 @@ public:
     void addToPotentialBurningPixels(int givenIndex);
 
     void addToPotentialAshes(int givenIndex);
+
+    void Simulation();
 private:
 
     // used to get the forest zones and to keep track of the zones while it burns

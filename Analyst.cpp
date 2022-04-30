@@ -40,7 +40,6 @@ Analyst::Analyst(const Image &img) : analyzedImage(img)
     }
 
     mergeAll();
-    cout << "number of zones: " << zoneCount << endl;
 }
 
 
@@ -55,8 +54,6 @@ void Analyst::DisplayLL()
 
     for (int i = 0; i < (int)vectOfPointers.size(); i++)
     {
-        // auto it = vectOfPointers[i].listOfNodes.begin();
-        // vectOfPointers[i].listOfNodes.splice(it, tmpList);
         cout << "size of this list is: " << *(vectOfPointers[i].size) << " - ";
         for (auto it = vectOfPointers[i].listOfNodes->begin(); it != vectOfPointers[i].listOfNodes->end(); ++it)
         {
@@ -154,7 +151,6 @@ void Analyst::mergeAll()
             //decrementing the value at the index valueOfColor is logical as merging two zones of the same colors, decreases the number of
             //zones of this specific color
             vectOfNbOfZonesPerColor.at(valueOfColor)--;
-            //cout << "first if: " << i << " and " << i + 1 << endl;
             //we decrement the zoneCount as merging 2 zones means they are part of the same zone, which means their zone only has to count for 1 and not 2
             zoneCount--;
         }
@@ -164,7 +160,6 @@ void Analyst::mergeAll()
             int valueOfColor = analyzedImage.getPixel(i).toInt();
             //same idea as previous if condition
             vectOfNbOfZonesPerColor.at(valueOfColor)--;
-            //cout << "second if: " << i << " and " << i + analyzedImage.width() << endl;
             zoneCount--;
         }
     }

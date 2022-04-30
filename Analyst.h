@@ -77,6 +77,7 @@ public:
   //ask if pixel at ith row and jth column
   std::set<int> zoneOfPixel(int i, int j);
 
+  //optional procedure
   void DisplayLL();
 
   int find(int index);
