@@ -6,5 +6,5 @@ The goal of this project was to simulate wildfires given a text file representin
 
 Here are results on two simulations I did. The left one being a simple forest and the right one being a mix between a river, roads, forests.
 
-![](./images/simulation1.gif =220x200)
+![](./images/simulation1.gif)
 ![](./images/simulation2.gif)
