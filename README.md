@@ -1,3 +1,5 @@
+# Aerial Image Project
+
 The goal of this project was to simulate wildfires given a text file representing an aerial view.
  
 - Image: representing an image as a one dimensional array to store our pixels.
@@ -8,3 +10,4 @@ Here are results on two simulations I did. The left one being a simple forest an
 
 ![](./images/simulation1.gif)
 ![](./images/simulation2.gif)
+
