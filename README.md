@@ -1,4 +1,4 @@
-# Aerial Image Project
+# Wildfire Simulator
 
 The goal of this project was to simulate wildfires given a text file representing an aerial view.
  
